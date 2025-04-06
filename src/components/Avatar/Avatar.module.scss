@@ -1,0 +1,33 @@
+.wrapper {
+  padding-right: 12px;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.small:hover {
+    transform: none;
+  }
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 1px solid var(--primary);
+  height: 44px;
+  width: 44px;
+}
+
+.pdl {
+  margin-left: 12px;
+}
+
+.small .avatar {
+  height: 36px;
+  width: 36px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}

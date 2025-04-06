@@ -1,0 +1,98 @@
+@charset "UTF-8";
+.wrapper {
+  --search-border-radius: 92px;
+  --search-height: 46px;
+  --search-top-spacer: 9px;
+  --search-button-width: 52px;
+  width: 100%;
+  height: var(--default-layout-header-height, 60px);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.inner {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.webName {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  margin-right: 12px;
+}
+
+.logo img {
+  width: 64px;
+  height: 60px;
+  cursor: pointer;
+}
+
+.search-bar {
+  width: 320px;
+  position: relative;
+  height: var(--search-height);
+  background-color: rgba(22, 24, 35, 0.06);
+  border-radius: var(--search-border-radius);
+  padding-left: 16px;
+  display: flex;
+  border: 1.5px solid transparent;
+}
+.search-bar input {
+  flex: 1;
+  color: var(--black);
+  font-size: 1.6rem;
+  background-color: transparent;
+  padding-right: 12px;
+}
+.search-bar:hover {
+  border: 1.5px solid var(--primary);
+}
+.search-bar:focus-within {
+  border: 1.5px solid var(--primary);
+}
+.search-bar:focus-within .search-btn {
+  color: var(--primary);
+}
+
+.search-btn {
+  background-color: transparent;
+  padding-right: 12px;
+  color: rgba(22, 24, 35, 0.75);
+}
+
+.profileBtn {
+  margin-left: 20px;
+}
+
+.avatar {
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover; /* Đảm bảo ảnh vừa khít */
+  cursor: pointer;
+  border: 1px solid #ccc;
+  height: 44px;
+  width: 44px;
+}/*# sourceMappingURL=Header.module.css.map */

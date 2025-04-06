@@ -1,0 +1,65 @@
+@import 'normalize.css';
+
+:root {
+  --primary: #6dacfa;
+  --black: #000;
+  --white: #fff;
+  --text-color: #161823;
+
+  --font-family: 'ProximaNova', sans-serif;
+
+  /* // Default layout */
+  --default-layout-header-height: 60px;
+  --default-layout-width: 1150px;
+  --default-layout-horizontal-spacer: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.2rem;
+  line-height: 1.5;
+  text-rendering: optimizeSpeed;
+}
+
+button,
+input,
+[tabindex] {
+  outline: none;
+  border: none;
+  background-color: #fff;
+  color: #000;
+}
+
+a[href] {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+span {
+  /* font-weight: 500; */
+  /* letter-spacing: 0.01em; */
+  /* text-transform: uppercase; */
+  font-size: 1.6rem;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+p {
+  font-size: 16px;
+}

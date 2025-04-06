@@ -1,0 +1,155 @@
+@charset "UTF-8";
+.wrapper {
+  border: 0.5px solid var(--primary);
+  border-radius: 12px;
+  background-color: antiquewhite;
+  width: 50%;
+  margin: auto;
+  margin-top: 16px;
+  overflow: hidden;
+  max-height: 600px;
+}
+
+.topBar {
+  margin: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.infoWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.createdAt {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.moreOptionsBtn {
+  border: none;
+  background-color: transparent;
+  color: var(--primary);
+  font-size: 1.4rem;
+}
+
+.content {
+  margin: 12px;
+}
+
+.description {
+  margin: 0;
+}
+
+.media {
+  display: grid;
+  gap: 12px; /* Khoảng cách giữa các media items */
+  padding-top: 12px;
+  margin-bottom: 12px;
+}
+
+.media.single {
+  grid-template-columns: 1fr; /* 1 ảnh chiếm toàn bộ chiều rộng */
+}
+
+.media.double {
+  grid-template-columns: 1fr 1fr; /* 2 ảnh chia đôi không gian */
+}
+
+.media.multiple {
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Nhiều ảnh, tự động chia */
+}
+
+.mediaItem {
+  border: 0.5px solid var(--primary);
+  border-radius: 8px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 100%;
+  height: 100%; /* Đảm bảo media vừa khít */
+  max-height: 300px; /* Giới hạn chiều cao */
+}
+
+.postStatus {
+  margin: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.emoCount {
+  margin-left: 4px;
+  cursor: pointer;
+}
+.emoCount:hover {
+  text-decoration: underline;
+}
+
+.commentCount {
+  margin-right: 4px;
+  cursor: pointer;
+}
+.commentCount:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  margin: 12px;
+  justify-content: space-between;
+  position: relative;
+  font-size: 14px;
+}
+.actions::after {
+  content: "";
+  height: 1px;
+  width: 100%;
+  background-color: var(--primary);
+  position: absolute;
+  top: -4px;
+}
+.actions::before {
+  content: "";
+  height: 1px;
+  width: 100%;
+  background-color: var(--primary);
+  position: absolute;
+  bottom: -4px;
+}
+
+.actions button {
+  background-color: transparent;
+}
+.actions button:active {
+  scale: 1.1;
+}
+.actions button:hover {
+  color: var(--primary);
+}
+
+.likeBtn.liked {
+  color: var(--primary);
+}
+
+.saveBtn.saved {
+  color: var(--primary);
+}
+
+.commentSection {
+  margin: 16px;
+}
+
+.showCommentsBtn {
+  background-color: transparent;
+  font-size: 16px;
+}
+.showCommentsBtn:active {
+  scale: 1.1;
+}
+.showCommentsBtn:hover {
+  color: var(--primary);
+}/*# sourceMappingURL=PostItem.module.css.map */

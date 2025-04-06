@@ -1,0 +1,22 @@
+.wrapper {
+  padding-bottom: 12px;
+}
+
+.wrapper input {
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 18px;
+  box-sizing: border-box;
+  height: 50px;
+  width: 320px;
+  min-width: 80px;
+
+  &:hover {
+    border-color: var(--black);
+  }
+
+  &:focus {
+    border-color: var(--black);
+  }
+}
