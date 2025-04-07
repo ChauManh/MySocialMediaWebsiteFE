@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './CommentItem.module.scss';
 import Avatar from '../Avatar';
+import formatDate from '../../utils/formatDate';
 
 const cx = classNames.bind(styles);
 
@@ -12,6 +13,7 @@ function CommentItem({ avatar, name, createdAt, description }) {
         <div className={cx('comment')}>
           <span className={cx('name')}>{name}</span>
           <span className={cx('description')}>{description}</span>
+          <span className={cx('createdAt')}>{formatDate(createdAt)}</span>
         </div>
       </div>
       {/* <div className={cx('comment')}>

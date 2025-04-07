@@ -6,7 +6,7 @@ import Button from "../../components/Button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { loginApi } from "../../services/api.js";
+import { loginApi } from "../../services/authApi.js";
 
 const cx = classNames.bind(styles);
 
@@ -15,7 +15,6 @@ function SignIn() {
     email: "",
     password: "",
   });
-
   const onUpdateField = (e) => {
     const nextFormState = {
       ...form,
@@ -38,21 +37,23 @@ function SignIn() {
 
     try {
       const result = await loginApi(form.email, form.password);
-
       // Lưu jwt token
       if (result.EC == 0) {
-        localStorage.setItem("access_token", result.result);
+        localStorage.setItem("access_token", result.result.access_token);
+        localStorage.setItem("user", JSON.stringify(result.result.user));
         toast.success(result.EM, {
-          duration: 2000,
+          duration: 1000,
           position: "top-right",
         });
-        window.location.href = "/home";
+        setTimeout(() => {
+          window.location.href = "/home";
+        }, 1000);
       } else {
         toast.error(result.EM, {
           duration: 2000,
           position: "top-right",
         });
-        return 0; // stop further processing if login failed
+        return 0;
       }
     } catch (err) {
       const errorMessage = err.response?.data?.error;
@@ -86,12 +87,7 @@ function SignIn() {
             onChange={onUpdateField}
           />
           <div className={cx("actions")}>
-            <Button
-              type="submit"
-              primary
-              className={cx("signInBtn")}
-              onClick={handleSignIn}
-            >
+            <Button type="submit" primary className={cx("signInBtn")}>
               Sign in
             </Button>
             {/* <Link to="/signup"> */}

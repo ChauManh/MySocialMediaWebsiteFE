@@ -1,12 +1,13 @@
 .wrapper {
   border: 0.5px solid var(--primary);
   border-radius: 12px;
-  background-color: antiquewhite;
-  width: 50%;
+  // background-color: antiquewhite;
+  width: 100%;
   margin: auto;
   margin-top: 16px;
   overflow: hidden;
-  max-height: 600px;
+  max-height: 650px;
+  // max-width: 50%;
 }
 
 .topBar {
@@ -23,10 +24,13 @@
 .info {
   display: flex;
   flex-direction: column;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .createdAt {
   color: rgba(0, 0, 0, 0.4);
+  font-size: 1.2rem;
 }
 
 .moreOptionsBtn {
@@ -38,10 +42,14 @@
 
 .content {
   margin: 12px;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .description {
   margin: 0;
+  font-size: 2rem !important;
+  font-weight: 600;
 }
 
 .media {
@@ -154,6 +162,7 @@
 .showCommentsBtn {
   background-color: transparent;
   font-size: 16px;
+  margin-bottom: 8px;
 
   &:active {
     scale: 1.1;
@@ -162,4 +171,8 @@
   &:hover {
     color: var(--primary);
   }
+}
+
+.noComments {
+  font-size: 16px;
 }

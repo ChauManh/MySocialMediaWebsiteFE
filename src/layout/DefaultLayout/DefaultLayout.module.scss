@@ -12,6 +12,9 @@
 .content {
   flex: 1;
   overflow-y: auto;
-  margin-left: 20%;
+  margin-left: 25%;
   margin-top: var(--default-layout-header-height);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import styles from './MenuItem.module.scss';
+import styles from './SidebarItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function MenuItem({ to, icon, label }) {
+function SidebarItem({ to, icon, label }) {
   return (
     <Link to={to} className={cx('wrapper')}>
       <div className={cx('icon')}>
@@ -15,4 +15,4 @@ function MenuItem({ to, icon, label }) {
   );
 }
 
-export default MenuItem;
+export default SidebarItem;

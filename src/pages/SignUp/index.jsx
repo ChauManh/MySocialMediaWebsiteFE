@@ -8,7 +8,7 @@ import { useState } from "react";
 // import axios from 'axios';
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { createApi } from "../../services/api";
+import { createApi } from "../../services/authApi";
 
 const cx = classNames.bind(styles);
 

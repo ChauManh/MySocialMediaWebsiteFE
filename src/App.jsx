@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { publicRoute, privateRoute } from './routes';
-import DefaultLayout from './components/Layout/DefaultLayout';
+import DefaultLayout from './layout/DefaultLayout/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Fragment } from 'react';
 
 function App() {
   const isAuthenticated = () => {
-    return localStorage.getItem('access_token') != null;
+    if (localStorage.getItem('access_token')) return true;
+    return false;
   };
   return (
     <Router>

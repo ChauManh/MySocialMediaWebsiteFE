@@ -4,6 +4,8 @@ import images from '../../assets/images';
 import Button from '../../components/Button';
 import Avatar from '../../components/Avatar';
 import PostItem from '../../components/PostItem';
+import { useAuth } from "../../contexts/authContext";
+
 
 const cx = classNames.bind(styles);
 
@@ -47,12 +49,17 @@ const postList = [
 ];
 
 function Home() {
+  const { user, loading } = useAuth();
+  if (loading) {
+    return <div>Loading...</div>; // Hoặc có thể hiển thị một spinner
+  }
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('statusBar')}>
         <div className={cx('itemBar')}>
-          <Avatar image={images.avatar} />
-          <span className={cx('itemText')}>What are you thinking?</span>
+          <Avatar image={user.profilePicture} />
+          <span className={cx('itemText')}>{user.fullname}, What are you thinking?</span>
         </div>
         <div className={cx('actions')}>
           <Button primary className={cx('postBtn')}>
