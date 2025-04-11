@@ -20,7 +20,6 @@
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-
   }
 }
 
@@ -29,9 +28,9 @@
   align-items: center;
   margin-top: -60px;
   width: 100%;
-  max-width: 1000px;
-  // padding: 0 10;
-  z-index: 1500;
+  border-bottom: var(--primary) solid 1px;
+  padding-bottom: 10px;
+  z-index: 2;
 
   .avatar {
     width: 160px;
@@ -39,29 +38,64 @@
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid white;
-    margin-right: 15px;
+    margin-right: 16px;
+    margin-left: 16px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     &:hover {
       transform: scale(1.1);
-      cursor: pointer;  
+      cursor: pointer;
     }
     &:active {
       transform: scale(1);
     }
   }
+}
 
-  .userName {
-    display: flex;
+.nameAndAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  flex-wrap: wrap; // cho responsive
+  padding-top: 40px;
+
+
+  @media (max-width: 768px) {
     flex-direction: column;
-    justify-content: center;
-    padding-top: 30px;
-    
-    h1 {
-      font-size: 26px;
-      font-weight: 600;
-      color: #000;
-      margin: 0;
-    }
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+  }
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 16px;
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 4px;
+  }
+
+  span {
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 16px;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -101,24 +135,7 @@
 }
 
 .editBtn {
-  background-color: var(--primary);
-  border: 1px solid var(--white);
-  color: var(--white);
-  padding: 4px 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
   margin-left: 8px;
-
-  &:hover {
-    background-color: var(--white);
-    color: var(--primary);
-  }
-
-  &:active{
-    background-color: var(--primary);
-    color: var(--white);
-  }
 }
 
 .editCoverBtn {
@@ -129,13 +146,6 @@
 
 .avatarWrapper {
   position: relative;
-}
-
-.editAvatarBtn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  transform: translate(50%, 50%);
 }
 
 .bioHeader {
@@ -151,32 +161,8 @@
   margin-top: 16px;
 }
 
-.statusBar {
-  margin-top: 16px;
-  margin-right: auto;
-  margin-left: auto;
-  width: 80%;
-  justify-content: center;
-  height: 120px;
-  background-color: white;
-  border-radius: 12px;
-  padding-right: 12px;
-  padding-left: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.itemBar {
+.nameRow {
   display: flex;
-  height: 50%;
   align-items: center;
-}
-
-.actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
-
-.postBtn {
-  width: 100%;
+  gap: 10px;
 }

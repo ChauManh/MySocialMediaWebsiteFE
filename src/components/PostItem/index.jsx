@@ -40,7 +40,7 @@ function PostItem({
             <a href="/home" className={cx("name")}>
               {name}
             </a>
-            <span className={cx("createdAt")}>{createdAt}</span>
+            <span className={cx("createdAt")}>{formatDate(createdAt)}</span>
           </div>
         </div>
         <button className={cx("moreOptionsBtn")}>

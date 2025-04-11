@@ -2,81 +2,162 @@ import classNames from "classnames/bind";
 import styles from "./Profile.module.scss";
 import React, { useEffect, useState } from "react";
 import images from "../../assets/images";
-import { getUserInfo } from "../../services/userApi";
+import {
+  getUserInfo,
+  sendFriendRequest,
+  cancelFriendRequest,
+  unfriend,
+  acceptFriendRequest,
+  denyFriendRequest,
+} from "../../services/userApi";
 import PostItem from "../../components/PostItem";
 import Button from "../../components/Button";
-import Avatar from "../../components/Avatar";
 import { getPosts } from "../../services/postApi";
-import formatDate from "../../utils/formatDate";
 import { useAuth } from "../../contexts/authContext";
 import { useParams } from "react-router-dom";
+import Statusbar from "../../components/Statusbar";
+import toast from "react-hot-toast";
 
 const cx = classNames.bind(styles);
 
 function Profile() {
   const { user } = useAuth();
-  const { userId: paramUserId } = useParams(); // Lấy userId từ URL
+  const { userId: paramUserId } = useParams();
   const [userProfile, setUserProfile] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isFriend, setIsFriend] = useState(false);
+  const [hasSentReq, setHasSentReq] = useState(false);
+  const [hasReceivedReq, setHasReceivedReq] = useState(false);
+  const isCurrentUserProfile = paramUserId === user.userId;
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchAllProfile = async () => {
       try {
-        const result = await getUserInfo(paramUserId);
-        setUserProfile(result.result);
+        const userInfo = await getUserInfo(paramUserId);
+        const userPost = await getPosts(paramUserId);
+        setUserProfile(userInfo.result);
+        setUserPosts(userPost.result);
       } catch (error) {
-        console.error("Error fetching profile:", error);
+        toast.error(error.message || "Lỗi khi tải thông tin người dùng.");
       } finally {
         setLoading(false);
       }
     };
-    fetchUserProfile();
+    fetchAllProfile();
   }, [paramUserId]);
 
   useEffect(() => {
-    const fetchUserPosts = async () => {
-      try {
-        const result = await getPosts(paramUserId);
-        setUserPosts(result.result);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserPosts();
-  }, [paramUserId]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  const isCurrentUserProfile = paramUserId === user.userId; // So sánh userId từ URL với userId trong context
+    if (!userProfile) return;
+    setIsFriend(userProfile.friends.includes(user.userId));
+    setHasSentReq(userProfile.friendRequests?.received.includes(user.userId));
+    setHasReceivedReq(userProfile.friendRequests?.sent.includes(user.userId));
+  }, [userProfile, user.userId]);
 
   const handleEditAvatar = () => {
     if (isCurrentUserProfile) {
-      alert("Chức năng sửa avatar đang được phát triển.");
+      toast("Chức năng sửa avatar đang được phát triển.");
     } else {
-      alert("Bạn không thể sửa avatar của người khác.");
+      toast.error("Bạn không thể sửa avatar của người khác.");
     }
   };
 
   const handleEditCover = () => {
     if (isCurrentUserProfile) {
-      alert("Chức năng sửa ảnh bìa đang được phát triển.");
+      toast("Chức năng sửa ảnh bìa đang được phát triển.");
     } else {
-      alert("Bạn không thể sửa ảnh bìa của người khác.");
+      toast.error("Bạn không thể sửa ảnh bìa của người khác.");
     }
   };
 
   const handleEditBio = () => {
     if (isCurrentUserProfile) {
-      alert("Chức năng sửa tiểu sử đang được phát triển.");
+      toast("Chức năng sửa tiểu sử đang được phát triển.");
     } else {
-      alert("Bạn không thể sửa tiểu sử của người khác.");
+      toast.error("Bạn không thể sửa tiểu sử của người khác.");
     }
   };
+
+  const handleFriendAction = async (actionType) => {
+    try {
+      let result;
+      switch (actionType) {
+        case "send":
+          result = await sendFriendRequest(paramUserId);
+          if (result.EC === 0) {
+            setHasSentReq(true);
+            toast.success(result.EM);
+          } else {
+            toast.error(result.EM);
+            setTimeout(() => window.location.reload(), 1000);
+          }
+          break;
+
+        case "cancel":
+          result = await cancelFriendRequest(paramUserId);
+          if (result.EC === 0) {
+            setHasSentReq(false);
+            toast.success(result.EM);
+          } else {
+            toast.error(result.EM);
+            setTimeout(() => window.location.reload(), 1000);
+          }
+          break;
+
+        case "unfriend":
+          result = await unfriend(paramUserId);
+          if (result.EC === 0) {
+            setIsFriend(false);
+            setUserProfile((prev) => ({
+              ...prev,
+              friends: prev.friends.filter((id) => id !== user.userId),
+            }));
+            toast.success(result.EM);
+          } else {
+            toast.error(result.EM);
+            setTimeout(() => window.location.reload(), 1000);
+          }
+          break;
+
+        case "accept":
+          result = await acceptFriendRequest(paramUserId);
+          if (result.EC === 0) {
+            setIsFriend(true);
+            setHasReceivedReq(false);
+            setUserProfile((prev) => ({
+              ...prev,
+              friends: [...prev.friends, user.userId],
+            }));
+            toast.success(result.EM);
+          } else {
+            toast.error(result.EM);
+            setTimeout(() => window.location.reload(), 1000);
+          }
+          break;
+
+        case "deny":
+          result = await denyFriendRequest(paramUserId);
+          if (result.EC === 0) {
+            setHasReceivedReq(false);
+            toast.success(result.EM);
+          } else {
+            toast.error(result.EM);
+            setTimeout(() => window.location.reload(), 1000);
+          }
+          break;
+
+        default:
+          toast.error("Hành động không hợp lệ.");
+          return;
+      }
+    } catch (error) {
+      toast.error(error.message || "Lỗi không xác định.");
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={cx("profileContainer")}>
@@ -87,13 +168,18 @@ function Profile() {
           className={cx("coverPhoto")}
         />
         {isCurrentUserProfile ? (
-          <button className={cx("editBtn", "editCoverBtn")} onClick={handleEditCover}>
+          <Button
+            primary
+            small
+            className={cx("editCoverBtn")}
+            onClick={handleEditCover}
+          >
             Sửa ảnh bìa
-          </button>
+          </Button>
         ) : (
-          <button className={cx("editBtn", "editCoverBtn")}>
+          <Button primary small className={cx("editCoverBtn")}>
             Xem ảnh bìa
-          </button>
+          </Button>
         )}
       </div>
 
@@ -106,8 +192,58 @@ function Profile() {
             onClick={handleEditAvatar}
           />
         </div>
-        <div className={cx("userName")}>
-          <h1>{userProfile?.fullname}</h1>
+
+        <div className={cx("nameAndAction")}>
+          <div className={cx("userInfo")}>
+            <h1>{userProfile?.fullname}</h1>
+            <span>{userProfile.friends.length} bạn bè</span>
+          </div>
+          {!isCurrentUserProfile && (
+            <div className={cx("actionButtons")}>
+              {isFriend ? (
+                <Button
+                  small
+                  outline
+                  onClick={() => handleFriendAction("unfriend")}
+                >
+                  Bạn bè (Hủy)
+                </Button>
+              ) : hasReceivedReq ? (
+                <>
+                  <Button
+                    small
+                    primary
+                    onClick={() => handleFriendAction("accept")}
+                  >
+                    Chấp nhận
+                  </Button>
+                  <Button
+                    small
+                    outline
+                    onClick={() => handleFriendAction("deny")}
+                  >
+                    Từ chối
+                  </Button>
+                </>
+              ) : hasSentReq ? (
+                <Button
+                  small
+                  outline
+                  onClick={() => handleFriendAction("cancel")}
+                >
+                  Đã gửi lời mời (Hủy)
+                </Button>
+              ) : (
+                <Button
+                  small
+                  primary
+                  onClick={() => handleFriendAction("send")}
+                >
+                  Kết bạn
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -116,13 +252,18 @@ function Profile() {
           <div className={cx("bioHeader")}>
             <h2>Tiểu sử</h2>
             {isCurrentUserProfile ? (
-              <button className={cx("editBtn")} onClick={handleEditBio}>
+              <Button
+                primary
+                small
+                className={cx("editBtn")}
+                onClick={handleEditBio}
+              >
                 Sửa
-              </button>
+              </Button>
             ) : (
-              <button className={cx("editBtn")} disabled>
+              <Button primary small disabled>
                 Xem
-              </button>
+              </Button>
             )}
           </div>
           <p>{userProfile?.about || "Chưa có tiểu sử"}</p>
@@ -130,38 +271,25 @@ function Profile() {
 
         <div className={cx("postContainer")}>
           <h2>Bài viết gần đây</h2>
-
-          {/* Hiển thị statusBar chỉ khi người dùng là chủ sở hữu của profile */}
-          {isCurrentUserProfile && (
-            <div className={cx("statusBar")}>
-              <div className={cx("itemBar")}>
-                <Avatar image={images.avatar} />
-                <span className={cx("itemText")}>{user.fullname}, What are you thinking?</span>
-              </div>
-              <div className={cx("actions")}>
-                <Button primary className={cx("postBtn")}>
-                  Add a new post
-                </Button>
-              </div>
-            </div>
-          )}
-
+          {isCurrentUserProfile && <Statusbar />}
           {userPosts.length > 0 ? (
-            userPosts.slice(0, 3).map((post, index) => (
-              <PostItem
-                key={post._id || index}
-                avatar={post.authorId.profilePicture}
-                name={post.authorId.fullname}
-                comments={post.comments}
-                createdAt={formatDate(post.createdAt)}
-                description={post.content}
-                media={post.image}
-                emoCount={post.likes.length}
-                commentCount={post.comments.length}
-                liked={post.liked}
-                saved={post.saved}
-              />
-            ))
+            userPosts
+              .slice(0, 3)
+              .map((post, index) => (
+                <PostItem
+                  key={post._id || index}
+                  avatar={post.authorId.profilePicture}
+                  name={post.authorId.fullname}
+                  comments={post.comments}
+                  createdAt={post.createdAt}
+                  description={post.content}
+                  media={post.image}
+                  emoCount={post.likes.length}
+                  commentCount={post.comments.length}
+                  liked={post.liked}
+                  saved={post.saved}
+                />
+              ))
           ) : (
             <p className={cx("noPosts")}>Chưa có bài viết nào.</p>
           )}

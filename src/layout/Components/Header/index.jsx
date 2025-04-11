@@ -70,7 +70,7 @@ function Header() {
             trigger="mouseenter focus click"
           >
             <div>
-              <Avatar image={user.profilePicture} pdl />
+              <Avatar image={user?.profilePicture} pdl />
             </div>
           </Tippy>
         </div>

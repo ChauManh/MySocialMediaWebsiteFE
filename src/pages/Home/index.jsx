@@ -1,77 +1,58 @@
-import classNames from 'classnames/bind';
-import styles from './Home.module.scss';
-import images from '../../assets/images';
-import Button from '../../components/Button';
-import Avatar from '../../components/Avatar';
-import PostItem from '../../components/PostItem';
+import classNames from "classnames/bind";
+import styles from "./Home.module.scss";
+import PostItem from "../../components/PostItem";
 import { useAuth } from "../../contexts/authContext";
-
-
+import Statusbar from "../../components/Statusbar";
+import { useEffect, useState } from "react";
+import { getPosts } from "../../services/postApi";
 const cx = classNames.bind(styles);
 
-const postList = [
-  {
-    id: 1,
-    avatar: images.avatar,
-    name: 'John Doe',
-    createdAt: '3 hours ago',
-    description: 'Had a great time exploring the mountains! 🏔️',
-    media: [{ type: 'image', url: 'https://vj-prod-website-cms.s3.ap-southeast-1.amazonaws.com/2090486035-1676518664908.jpg' }],
-    emoCount: 12,
-    commentCount: 3,
-    liked: false,
-    saved: false,
-  },
-  {
-    id: 2,
-    avatar: images.avatar,
-    name: 'Jane Smith',
-    createdAt: '1 day ago',
-    description: 'Loving the new coffee shop in town! ☕',
-    media: [{ type: 'image', url: 'https://texascoffeeschool.com/wp-content/uploads/2021/10/DSC_0052-scaled.jpg' }],
-    emoCount: 25,
-    commentCount: 8,
-    liked: true,
-    saved: false,
-  },
-  {
-    id: 3,
-    avatar: images.avatar,
-    name: 'Alice Johnson',
-    createdAt: '2 days ago',
-    description: 'Check out my new painting! 🎨',
-    media: [{ type: 'image', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtih7CtkSyyovW7Ucrk5jz4kV0tiy6ioIWVQ&s' }],
-    emoCount: 30,
-    commentCount: 5,
-    liked: false,
-    saved: true,
-  },
-];
-
 function Home() {
-  const { user, loading } = useAuth();
-  if (loading) {
-    return <div>Loading...</div>; // Hoặc có thể hiển thị một spinner
-  }
+  const { user } = useAuth();
+  const [userPosts, setUserPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+      if (!user?.userId) return; // Nếu chưa có user thì không fetch
+  
+      try {
+        const result = await getPosts(user.userId);
+        setUserPosts(result.result);
+      } catch (error) {
+        alert(error.message);
+        // console.error("Error fetching posts:", error);
+      }
+    };
+  
+    fetchUserPosts();
+  }, [user]);
 
   return (
-    <div className={cx('wrapper')}>
-      <div className={cx('statusBar')}>
-        <div className={cx('itemBar')}>
-          <Avatar image={user.profilePicture} />
-          <span className={cx('itemText')}>{user.fullname}, What are you thinking?</span>
-        </div>
-        <div className={cx('actions')}>
-          <Button primary className={cx('postBtn')}>
-            Add a new post
-          </Button>
-        </div>
-      </div>
+    <div className={cx("wrapper")}>
+      <Statusbar> </Statusbar>
 
-      <div className={cx('postContainer')}>
-      {postList.map((post) => (
-          <PostItem key={post.id} {...post} />
-        ))}
+      <div className={cx("postContainer")}>
+        {userPosts?.length > 0 ? (
+          userPosts
+            .slice(0, 3)
+            .map((post, index) => (
+              <PostItem
+                key={post._id || index}
+                avatar={post.authorId.profilePicture}
+                name={post.authorId.fullname}
+                comments={post.comments}
+                createdAt={post.createdAt}
+                description={post.content}
+                media={post.image}
+                emoCount={post.likes.length}
+                commentCount={post.comments.length}
+                liked={post.liked}
+                saved={post.saved}
+              />
+            ))
+        ) : (
+          <p className={cx("noPosts")}>Chưa có bài viết nào.</p>
+        )}
       </div>
     </div>
   );
