@@ -23,7 +23,7 @@ function ProfileBioAndPost() {
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [newBio, setNewBio] = useState("");
   const [loading, setLoading] = useState(true);
-  const isCurrentUserProfile = paramUserId === user.userId;
+  const isCurrentUserProfile = paramUserId === user._id;
 
   useEffect(() => {
     const fetchAllProfile = async () => {
@@ -126,8 +126,9 @@ function ProfileBioAndPost() {
         </div>
 
         <div className={cx("postContainer")}>
+        {isCurrentUserProfile && <Statusbar />}
+
           <h2>Bài viết gần đây</h2>
-          {isCurrentUserProfile && <Statusbar />}
           {userPosts.length > 0 ? (
             userPosts.map((post, index) => (
               <PostItem

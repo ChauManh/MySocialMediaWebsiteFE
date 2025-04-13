@@ -1,0 +1,25 @@
+.wrapper {
+  width: 80%;
+  display: flex;
+  margin: 2px auto;
+  flex-direction: column;
+  //   align-items: center;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  padding-bottom: 32px;
+
+
+  h2 {
+    // left: 0;
+    font-size: 2.4rem;
+    margin-bottom: 16px;
+    padding-left: 16px;
+  }
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+}

@@ -15,12 +15,11 @@ function Header() {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("access_token");
-    localStorage.removeItem("user");
-    window.location.href = "/";
+    navigate("/");
   };
 
   const handleProfile = () => {
-    navigate(`/profile/${user.userId}`);
+    navigate(`/profile/${user?._id}`);
   };
 
   return (

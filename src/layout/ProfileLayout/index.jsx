@@ -28,12 +28,12 @@ function ProfileLayout({ children }) {
   const [isFriend, setIsFriend] = useState(false);
   const [hasSentReq, setHasSentReq] = useState(false);
   const [hasReceivedReq, setHasReceivedReq] = useState(false);
-  const isCurrentUserProfile = paramUserId === user.userId;
+  const isCurrentUserProfile = paramUserId === user?._id;
   const location = useLocation();
   const currentPath = location.pathname;
 
   useEffect(() => {
-    const fetchAllProfile = async () => {
+    const fetchUserInfo = async () => {
       try {
         const userInfo = await getUserInfo(paramUserId);
         setUserProfile(userInfo.result);
@@ -43,15 +43,15 @@ function ProfileLayout({ children }) {
         setLoading(false);
       }
     };
-    fetchAllProfile();
+    fetchUserInfo();
   }, [paramUserId]);
 
   useEffect(() => {
     if (!userProfile) return;
-    setIsFriend(userProfile.friends.includes(user.userId));
-    setHasSentReq(userProfile.friendRequests?.received.includes(user.userId));
-    setHasReceivedReq(userProfile.friendRequests?.sent.includes(user.userId));
-  }, [userProfile, user.userId]);
+    setIsFriend(userProfile.friends.includes(user?._id));
+    setHasSentReq(userProfile.friendRequests?.received.includes(user?._id));
+    setHasReceivedReq(userProfile.friendRequests?.sent.includes(user?._id));
+  }, [userProfile, user?._id]);
 
   const handleEditAvatar = () => {
     if (isCurrentUserProfile) {
@@ -101,7 +101,7 @@ function ProfileLayout({ children }) {
             setIsFriend(false);
             setUserProfile((prev) => ({
               ...prev,
-              friends: prev.friends.filter((id) => id !== user.userId),
+              friends: prev.friends.filter((id) => id !== user?._id),
             }));
             toast.success(result.EM);
           } else {
@@ -117,7 +117,7 @@ function ProfileLayout({ children }) {
             setHasReceivedReq(false);
             setUserProfile((prev) => ({
               ...prev,
-              friends: [...prev.friends, user.userId],
+              friends: [...prev.friends, user?._id],
             }));
             toast.success(result.EM);
           } else {
@@ -233,21 +233,23 @@ function ProfileLayout({ children }) {
           </div>
         </div>
         <div className={cx("actions")}>
-          <Link to={`/profile/${user.userId}`}>
+          <Link to={`/profile/${paramUserId}`}>
             <Button
               small
               className={
-                currentPath === `/profile/${user.userId}` ? "primary" : "outline"
+                currentPath === `/profile/${paramUserId}`
+                  ? "primary"
+                  : "outline"
               }
             >
               Bài viết
             </Button>
           </Link>
-          <Link to={`/profile/${user.userId}/friends`}>
+          <Link to={`/profile/${paramUserId}/friends`}>
             <Button
               small
               className={
-                currentPath === `/profile/${user.userId}/friends`
+                currentPath === `/profile/${paramUserId}/friends`
                   ? "primary"
                   : "outline"
               }

@@ -47,9 +47,9 @@ function Statusbar() {
   return (
     <div className={cx("statusBar")}>
       <div className={cx("itemBar")}>
-        <Avatar image={user.profilePicture} />
+        <Avatar image={user?.profilePicture} />
         <span className={cx("itemText")}>
-          {user.fullname}, Bạn đang nghĩ gì?
+          {user?.fullname}, Bạn đang nghĩ gì?
         </span>
       </div>
       <div className={cx("actions")}>
@@ -62,7 +62,7 @@ function Statusbar() {
           <div className={cx("popupContent")}>
             <h3>Đăng bài viết mới</h3>
             <textarea
-              placeholder={`${user.fullname}, bạn đang nghĩ gì?`}
+              placeholder={`${user?.fullname}, bạn đang nghĩ gì?`}
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               className={cx("captionInput")}

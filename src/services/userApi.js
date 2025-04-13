@@ -106,6 +106,17 @@ const denyFriendRequest = async (userId) => {
   }
 };
 
+const getUserFriends = async (userId) => {
+  try {
+    const result = await axios.get(`${URL_API}/friends/${userId}`, {
+      headers: { Authorization: `Bearer ${getAccessToken()}` },
+    });
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
 export {
   getUserInfo,
   getOwnerUserInfo,
@@ -115,4 +126,5 @@ export {
   acceptFriendRequest,
   denyFriendRequest,
   updateUserAbout,
+  getUserFriends,
 };

@@ -8,10 +8,10 @@ function Sidebar() {
   const { user } = useAuth();
   return (
     <aside className={cx("wrapper")}>
-      <MenuItem to={`/profile/${user.userId}`} icon="bi bi-person-circle" label={user.fullname} />
-      <MenuItem to="/" icon="bi bi-people" label="Friends" />
-      <MenuItem to="/" icon="bi bi-postcard" label="Your Posts" />
-      <MenuItem to="/" icon="bi bi-floppy" label="Saved" />
+      <MenuItem to={`/profile/${user?._id}`} icon="bi bi-person-circle" label={user?.fullname} />
+      <MenuItem to={`/profile/${user?._id}/friends`} icon="bi bi-people" label="Friends" />
+      <MenuItem to={`/profile/${user?._id}`} label="Your Posts" />
+      {/* <MenuItem to="/" icon="bi bi-floppy" label="Saved" /> */}
     </aside>
   );
 }
