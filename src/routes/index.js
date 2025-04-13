@@ -1,8 +1,9 @@
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
-import Profile from "../pages/Profile";
-import YHeaderNSidebarLayout from "../layout/YHeaderNSidebarLayout";
+import ProfileBioAndPost from "../pages/ProfileBioAndPost";
+// import YHeaderNSidebarLayout from "../layout/YHeaderNSidebarLayout";
+import ProfileLayout from "../layout/ProfileLayout";
 
 const publicRoute = [
   { path: "/", component: SignIn, Layout: null },
@@ -11,7 +12,7 @@ const publicRoute = [
 
 const privateRoute = [
   { path: "/home", component: Home },
-  { path: "/profile/:userId", component: Profile, Layout: YHeaderNSidebarLayout },
+  { path: "/profile/:userId", component: ProfileBioAndPost, Layout: ProfileLayout },
 ];
 
 export { publicRoute, privateRoute };

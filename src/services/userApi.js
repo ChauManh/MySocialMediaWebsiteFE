@@ -26,6 +26,19 @@ const getUserInfo = async (userId) => {
   }
 };
 
+const updateUserAbout = async (about) => {
+  try {
+    const result = await axios.patch(
+      URL_API,
+      { dataUpdate: { about } },
+      { headers: { Authorization: `Bearer ${getAccessToken()}` } }
+    );
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
 const sendFriendRequest = async (userId) => {
   try {
     const result = await axios.post(
@@ -101,4 +114,5 @@ export {
   unfriend,
   acceptFriendRequest,
   denyFriendRequest,
+  updateUserAbout,
 };
