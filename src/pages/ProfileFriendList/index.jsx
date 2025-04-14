@@ -12,7 +12,6 @@ function ProfileFriendList() {
   const { userId } = useParams();
   const { user } = useAuth();
   const [friends, setFriends] = useState([]);
-  const [loading, setLoading] = useState(true);
   const isCurrentUser = userId === user?._id;
 
   useEffect(() => {
@@ -24,14 +23,10 @@ function ProfileFriendList() {
         }
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
     fetchFriends();
   }, [userId]);
-
-  if (loading) return <p>Đang tải danh sách bạn bè...</p>;
 
   return (
     <div className={cx("wrapper")}>

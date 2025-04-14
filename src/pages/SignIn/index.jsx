@@ -40,7 +40,7 @@ function SignIn() {
       // Lưu jwt token
       if (result.EC == 0) {
         localStorage.setItem("access_token", result.result.access_token);
-        localStorage.setItem("user", JSON.stringify(result.result.user));
+        localStorage.setItem("refresh_token", result.result.refresh_token);
         toast.success(result.EM, {
           duration: 1000,
           position: "top-right",
@@ -85,6 +85,7 @@ function SignIn() {
             name="password"
             placeholder="Password"
             onChange={onUpdateField}
+            Autocomplete="current-password"
           />
           <div className={cx("actions")}>
             <Button type="submit" primary className={cx("signInBtn")}>

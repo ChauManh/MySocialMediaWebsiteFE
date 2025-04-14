@@ -70,11 +70,15 @@
 
 .imagePreviewWrapper {
   margin-top: 12px;
-  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // Hiển thị 2 cột
+  gap: 10px;
+  max-width: 100%;
+  max-height: 400px;
 
   img {
-    max-width: 100%;
-    max-height: 300px;
+    width: 100%; // chiếm toàn bộ ô
+    height: 150px;
     border-radius: 10px;
     object-fit: cover;
   }

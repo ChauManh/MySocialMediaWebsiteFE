@@ -4,6 +4,7 @@ import Avatar from "../Avatar";
 import { useState } from "react";
 import CommentItem from "../CommentItem";
 import formatDate from "../../utils/formatDate";
+import images from "../../assets/images";
 
 const cx = classNames.bind(styles);
 function PostItem({
@@ -35,7 +36,7 @@ function PostItem({
     <div className={cx("wrapper")}>
       <div className={cx("topBar")}>
         <div className={cx("infoWrapper")}>
-          <Avatar image={avatar} />
+          <Avatar image={avatar || images.avatar} />
           <div className={cx("info")}>
             <a href="/home" className={cx("name")}>
               {name}

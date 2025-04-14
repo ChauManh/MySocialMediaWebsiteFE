@@ -1,14 +1,13 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 const createApi = async (fullname, email, password) => {
-  const URL_API = "http://localhost:5000/auth/signup";
   const data = {
     fullname,
     email,
     password,
   };
   try {
-    const result = await axios.post(URL_API, data);
+    const result = await axiosInstance.post("auth/signup", data);
     return result.data;
   } catch (error) {
     return error.response.data;
@@ -16,17 +15,27 @@ const createApi = async (fullname, email, password) => {
 };
 
 const loginApi = async (email, password) => {
-  const URL_API = "http://localhost:5000/auth/signin";
   const data = {
     email,
     password,
   };
   try {
-    const result = await axios.post(URL_API, data);
+    const result = await axiosInstance.post("auth/signin", data);
     return result.data;
   } catch (error) {
     return error.response.data;
   }
 };
 
-export { loginApi, createApi };
+const refreshToken = async () => {
+  const refresh_token = localStorage.getItem("refresh_token");
+  try {
+    const res = await axiosInstance.post("auth/refresh_token", {
+      refresh_token,
+    });
+    return res.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+export { loginApi, createApi, refreshToken };

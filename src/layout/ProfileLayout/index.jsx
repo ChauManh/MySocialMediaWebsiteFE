@@ -14,59 +14,168 @@ import {
   unfriend,
   acceptFriendRequest,
   denyFriendRequest,
+  updateAvatar,
+  updateBackground,
+  deleteAvatar,
+  deleteBackground,
 } from "../../services/userApi";
 import toast from "react-hot-toast";
 import Button from "../../components/Button";
+import { useRef } from "react";
+import { useLoading } from "../../contexts/loadingContext";
 
 const cx = classNames.bind(styles);
 
 function ProfileLayout({ children }) {
-  const { user } = useAuth();
-  const { userId: paramUserId } = useParams();
+  const { user, setUser } = useAuth();
+  const { userId } = useParams();
   const [userProfile, setUserProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { setIsLoading } = useLoading();
   const [isFriend, setIsFriend] = useState(false);
   const [hasSentReq, setHasSentReq] = useState(false);
   const [hasReceivedReq, setHasReceivedReq] = useState(false);
-  const isCurrentUserProfile = paramUserId === user?._id;
+  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+  const [showBackgroundOptions, setShowBackgroundOptions] = useState(false);
+  const [editingAvatar, setEditingAvatar] = useState(false);
+  const fileInputRef = useRef();
+  const isCurrentUserProfile = userId === user?._id;
   const location = useLocation();
   const currentPath = location.pathname;
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const userInfo = await getUserInfo(paramUserId);
+        setIsLoading(true);
+        const userInfo = await getUserInfo(userId);
+        setIsFriend(userInfo.result.friends.includes(user?._id));
+        setHasSentReq(
+          userInfo.result.friendRequests?.received.includes(user?._id)
+        );
+        setHasReceivedReq(
+          userInfo.result.friendRequests?.sent.includes(user?._id)
+        );
         setUserProfile(userInfo.result);
       } catch (error) {
         toast.error(error.message || "Lỗi khi tải thông tin người dùng.");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchUserInfo();
-  }, [paramUserId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, user?._id]);
 
-  useEffect(() => {
-    if (!userProfile) return;
-    setIsFriend(userProfile.friends.includes(user?._id));
-    setHasSentReq(userProfile.friendRequests?.received.includes(user?._id));
-    setHasReceivedReq(userProfile.friendRequests?.sent.includes(user?._id));
-  }, [userProfile, user?._id]);
+  const handleOpenFileDialog = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    if (!file) {
+      toast.error("Vui lòng chọn một tệp.");
+      return;
+    }
+    setIsLoading(true);
+    let result = null;
+    if (editingAvatar) {
+      result = await updateAvatar(file);
+    } else {
+      result = await updateBackground(file);
+    }
+
+    if (result.EC === 0) {
+      if (editingAvatar) {
+        setUserProfile((prev) => ({
+          ...prev,
+          profilePicture: result.result.profilePicture,
+        }));
+        setUser((prev) => ({
+          ...prev,
+          profilePicture: result.result.profilePicture,
+        }));
+      } else {
+        setUserProfile((prev) => ({
+          ...prev,
+          backgroundPicture: result.result.backgroundPicture,
+        }));
+        setUser((prev) => ({
+          ...prev,
+          backgroundPicture: result.result.backgroundPicture,
+        }));
+      }
+    }
+    toast.success(result.EM);
+    setIsLoading(false);
+    setShowAvatarOptions(false);
+    setShowBackgroundOptions(false);
+  };
 
   const handleEditAvatar = () => {
-    if (isCurrentUserProfile) {
-      toast("Chức năng sửa avatar đang được phát triển.");
-    } else {
+    if (!isCurrentUserProfile) {
       toast.error("Bạn không thể sửa avatar của người khác.");
+      return;
+    }
+    setEditingAvatar(true);
+    setShowBackgroundOptions(false);
+    setShowAvatarOptions(!showAvatarOptions);
+  };
+
+  const handleDeleteAvatar = async () => {
+    setIsLoading(true);
+    const result = await deleteAvatar();
+    if (result.EC === 0) {
+      setUserProfile((prev) => ({
+        ...prev,
+        profilePicture: null,
+      }));
+      setUser((prev) => ({
+        ...prev,
+        profilePicture: null,
+      }));
+      toast.success(result.EM);
+      setIsLoading(false);
+      setShowAvatarOptions(false);
+    } else {
+      toast.error(result.EM);
+      setIsLoading(false);
+      setShowAvatarOptions(false);
+    }
+  };
+
+  const handleDeleteBackground = async () => {
+    setIsLoading(true);
+    const result = await deleteBackground();
+    if (result.EC === 0) {
+      setUserProfile((prev) => ({
+        ...prev,
+        backgroundPicture: null,
+      }));
+      setUser((prev) => ({
+        ...prev,
+        backgroundPicture: null,
+      }));
+      toast.success(result.EM);
+      setIsLoading(false);
+      setShowBackgroundOptions(false);
+    } else {
+      toast.error(result.EM);
+      setIsLoading(false);
+      setShowBackgroundOptions(false);
     }
   };
 
   const handleEditCover = () => {
-    if (isCurrentUserProfile) {
-      toast("Chức năng sửa ảnh bìa đang được phát triển.");
-    } else {
+    if (!isCurrentUserProfile) {
       toast.error("Bạn không thể sửa ảnh bìa của người khác.");
+      return;
     }
+    setEditingAvatar(false);
+    setShowAvatarOptions(false);
+    setShowBackgroundOptions(!showBackgroundOptions);
   };
 
   const handleFriendAction = async (actionType) => {
@@ -74,7 +183,7 @@ function ProfileLayout({ children }) {
       let result;
       switch (actionType) {
         case "send":
-          result = await sendFriendRequest(paramUserId);
+          result = await sendFriendRequest(userId);
           if (result.EC === 0) {
             setHasSentReq(true);
             toast.success(result.EM);
@@ -85,7 +194,7 @@ function ProfileLayout({ children }) {
           break;
 
         case "cancel":
-          result = await cancelFriendRequest(paramUserId);
+          result = await cancelFriendRequest(userId);
           if (result.EC === 0) {
             setHasSentReq(false);
             toast.success(result.EM);
@@ -96,7 +205,7 @@ function ProfileLayout({ children }) {
           break;
 
         case "unfriend":
-          result = await unfriend(paramUserId);
+          result = await unfriend(userId);
           if (result.EC === 0) {
             setIsFriend(false);
             setUserProfile((prev) => ({
@@ -111,7 +220,7 @@ function ProfileLayout({ children }) {
           break;
 
         case "accept":
-          result = await acceptFriendRequest(paramUserId);
+          result = await acceptFriendRequest(userId);
           if (result.EC === 0) {
             setIsFriend(true);
             setHasReceivedReq(false);
@@ -127,7 +236,7 @@ function ProfileLayout({ children }) {
           break;
 
         case "deny":
-          result = await denyFriendRequest(paramUserId);
+          result = await denyFriendRequest(userId);
           if (result.EC === 0) {
             setHasReceivedReq(false);
             toast.success(result.EM);
@@ -146,27 +255,35 @@ function ProfileLayout({ children }) {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
   return (
     <div className={cx("wrapper")}>
       <Header />
       <div className={cx("profileHeader")}>
         <div className={cx("coverPhotoContainer")}>
           <img
-            src={userProfile?.coverPhoto || images.avatar}
+            src={userProfile?.backgroundPicture || images.empty}
             alt="Cover"
             className={cx("coverPhoto")}
+            onClick={handleEditCover}
           />
-          <Button
-            primary
-            small
-            className={cx("editCoverBtn")}
-            onClick={isCurrentUserProfile ? handleEditCover : undefined}
-          >
-            {isCurrentUserProfile ? "Sửa ảnh bìa" : "Xem ảnh bìa"}
-          </Button>
+          {showBackgroundOptions && (
+            <div className={cx("backgroundOptions")}>
+              {!userProfile?.backgroundPicture ? (
+                <Button small primary onClick={handleOpenFileDialog}>
+                  Thêm ảnh bìa
+                </Button>
+              ) : (
+                <>
+                  <Button small primary onClick={handleOpenFileDialog}>
+                    Sửa ảnh bìa
+                  </Button>
+                  <Button small outline onClick={handleDeleteBackground}>
+                    Xóa ảnh bìa
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <div className={cx("profileInfoAndActions")}>
@@ -177,12 +294,30 @@ function ProfileLayout({ children }) {
               className={cx("avatar")}
               onClick={handleEditAvatar}
             />
+            {showAvatarOptions && (
+              <div className={cx("avatarOptions")}>
+                {!userProfile?.profilePicture ? (
+                  <Button small primary onClick={handleOpenFileDialog}>
+                    Thêm ảnh đại diện
+                  </Button>
+                ) : (
+                  <>
+                    <Button small primary onClick={handleOpenFileDialog}>
+                      Sửa ảnh đại diện
+                    </Button>
+                    <Button small outline onClick={handleDeleteAvatar}>
+                      Xóa ảnh đại diện
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           <div className={cx("nameAndAction")}>
             <div className={cx("userInfo")}>
               <h1>{userProfile?.fullname}</h1>
-              <span>{userProfile.friends.length} bạn bè</span>
+              <span>{userProfile?.friends?.length} bạn bè</span>
             </div>
             {!isCurrentUserProfile && (
               <div className={cx("actionButtons")}>
@@ -233,11 +368,11 @@ function ProfileLayout({ children }) {
           </div>
         </div>
         <div className={cx("actions")}>
-          <Link to={`/profile/${paramUserId}`}>
+          <Link to={`/profile/${userId}`}>
             <Button
               small
               className={
-                currentPath === `/profile/${paramUserId}`
+                currentPath === `/profile/${userId}`
                   ? "primary"
                   : "outline"
               }
@@ -245,11 +380,11 @@ function ProfileLayout({ children }) {
               Bài viết
             </Button>
           </Link>
-          <Link to={`/profile/${paramUserId}/friends`}>
+          <Link to={`/profile/${userId}/friends`}>
             <Button
               small
               className={
-                currentPath === `/profile/${paramUserId}/friends`
+                currentPath === `/profile/${userId}/friends`
                   ? "primary"
                   : "outline"
               }
@@ -260,6 +395,13 @@ function ProfileLayout({ children }) {
         </div>
       </div>
       <div className={cx("container")}>{children}</div>
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
     </div>
   );
 }

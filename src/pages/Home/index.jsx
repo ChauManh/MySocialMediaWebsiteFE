@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/authContext";
 import Statusbar from "../../components/Statusbar";
 import { useEffect, useState } from "react";
 import { getPosts } from "../../services/postApi";
+import images from "../../assets/images";
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -36,7 +37,7 @@ function Home() {
           userPosts.map((post, index) => (
             <PostItem
               key={post._id || index}
-              avatar={post.authorId.profilePicture}
+              avatar={post.authorId.profilePicture || images.avatar}
               name={post.authorId.fullname}
               comments={post.comments}
               createdAt={post.createdAt}

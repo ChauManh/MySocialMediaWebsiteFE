@@ -11,9 +11,9 @@
   background-color: var(--white);
   z-index: 3;
 
-  + .wrapper {
-    margin-left: 8px;
-  } // Css selector nut dung sau cach nut dung truoc
+  // + .wrapper {
+  //   margin-left: 8px;
+  // } // Css selector nut dung sau cach nut dung truoc
 
   &.disabled {
     pointer-events: none;

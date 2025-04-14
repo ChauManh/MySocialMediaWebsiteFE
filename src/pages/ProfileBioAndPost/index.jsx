@@ -1,10 +1,7 @@
 import classNames from "classnames/bind";
 import styles from "./ProfileBioAndPost.module.scss";
 import React, { useEffect, useState } from "react";
-import {
-  getUserInfo,
-  updateUserAbout,
-} from "../../services/userApi";
+import { getUserInfo, updateUserAbout } from "../../services/userApi";
 import PostItem from "../../components/PostItem";
 import Button from "../../components/Button";
 import { getPosts } from "../../services/postApi";
@@ -17,30 +14,30 @@ const cx = classNames.bind(styles);
 
 function ProfileBioAndPost() {
   const { user } = useAuth();
-  const { userId: paramUserId } = useParams();
+  const { userId } = useParams();
   const [userProfile, setUserProfile] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [newBio, setNewBio] = useState("");
-  const [loading, setLoading] = useState(true);
-  const isCurrentUserProfile = paramUserId === user._id;
+  const isCurrentUserProfile = userId === user?._id;
+
+  const fetchPosts = async () => {
+    const userPost = await getPosts(userId);
+    if (userPost.EC !== 0) {
+      toast.error(userPost.EM);
+      return;
+    }
+    setUserPosts(userPost.result);
+  };
 
   useEffect(() => {
     const fetchAllProfile = async () => {
-      try {
-        const userInfo = await getUserInfo(paramUserId);
-        const userPost = await getPosts(paramUserId);
-        setUserProfile(userInfo.result);
-        setUserPosts(userPost.result);
-      } catch (error) {
-        toast.error(error.message || "Lỗi khi tải thông tin người dùng.");
-      } finally {
-        setLoading(false);
-      }
+      const userInfo = await getUserInfo(userId);
+      await fetchPosts();
+      setUserProfile(userInfo.result);
     };
     fetchAllProfile();
-  }, [paramUserId]);
-
+  }, [userId]);
 
   const handleEditBio = () => {
     if (isCurrentUserProfile) {
@@ -76,13 +73,8 @@ function ProfileBioAndPost() {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className={cx("profileContainer")}>
-  
       <div className={cx("profileDetails")}>
         <div className={cx("bio")}>
           <div className={cx("bioHeader")}>
@@ -126,19 +118,19 @@ function ProfileBioAndPost() {
         </div>
 
         <div className={cx("postContainer")}>
-        {isCurrentUserProfile && <Statusbar />}
+        {isCurrentUserProfile && <Statusbar onPostSuccess={fetchPosts} />}
 
           <h2>Bài viết gần đây</h2>
           {userPosts.length > 0 ? (
             userPosts.map((post, index) => (
               <PostItem
                 key={post._id || index}
-                avatar={post.authorId.profilePicture}
-                name={post.authorId.fullname}
+                avatar={post?.authorId.profilePicture}
+                name={post?.authorId.fullname}
                 comments={post.comments}
                 createdAt={post.createdAt}
                 description={post.content}
-                media={post.image}
+                media={post.images || []}
                 emoCount={post.likes.length}
                 commentCount={post.comments.length}
                 liked={post.liked}

@@ -1,14 +1,8 @@
-import axios from "axios";
-
-const URL_API = `http://localhost:5000/user`;
-
-const getAccessToken = () => localStorage.getItem("access_token");
+import axiosInstance from "./axiosInstance";
 
 const getOwnerUserInfo = async () => {
   try {
-    const result = await axios.get(URL_API, {
-      headers: { Authorization: `Bearer ${getAccessToken()}` },
-    });
+    const result = await axiosInstance.get("user");
     return result.data;
   } catch (error) {
     return error.response?.data;
@@ -17,9 +11,7 @@ const getOwnerUserInfo = async () => {
 
 const getUserInfo = async (userId) => {
   try {
-    const result = await axios.get(`${URL_API}/${userId}`, {
-      headers: { Authorization: `Bearer ${getAccessToken()}` },
-    });
+    const result = await axiosInstance.get(`user/${userId}`);
     return result.data;
   } catch (error) {
     return error.response?.data;
@@ -28,11 +20,7 @@ const getUserInfo = async (userId) => {
 
 const updateUserAbout = async (about) => {
   try {
-    const result = await axios.patch(
-      URL_API,
-      { dataUpdate: { about } },
-      { headers: { Authorization: `Bearer ${getAccessToken()}` } }
-    );
+    const result = await axiosInstance.patch("user", { dataUpdate: { about } });
     return result.data;
   } catch (error) {
     return error.response?.data;
@@ -41,12 +29,9 @@ const updateUserAbout = async (about) => {
 
 const sendFriendRequest = async (userId) => {
   try {
-    const result = await axios.post(
-      `${URL_API}/friend-request/${userId}`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${getAccessToken()}` },
-      }
+    const result = await axiosInstance.post(
+      `user/friend-request/${userId}`,
+      {}
     );
     return result.data;
   } catch (error) {
@@ -56,9 +41,7 @@ const sendFriendRequest = async (userId) => {
 
 const cancelFriendRequest = async (userId) => {
   try {
-    const result = await axios.delete(`${URL_API}/friend-request/${userId}`, {
-      headers: { Authorization: `Bearer ${getAccessToken()}` },
-    });
+    const result = await axiosInstance.delete(`user/friend-request/${userId}`);
     return result.data;
   } catch (error) {
     return error.response?.data;
@@ -67,9 +50,7 @@ const cancelFriendRequest = async (userId) => {
 
 const unfriend = async (userId) => {
   try {
-    const result = await axios.delete(`${URL_API}/friend/${userId}`, {
-      headers: { Authorization: `Bearer ${getAccessToken()}` },
-    });
+    const result = await axiosInstance.delete(`user/friend/${userId}`);
     return result.data;
   } catch (error) {
     return error.response?.data;
@@ -78,12 +59,9 @@ const unfriend = async (userId) => {
 
 const acceptFriendRequest = async (userId) => {
   try {
-    const result = await axios.patch(
-      `${URL_API}/friend-request/accept/${userId}`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${getAccessToken()}` },
-      }
+    const result = await axiosInstance.patch(
+      `user/friend-request/accept/${userId}`,
+      {}
     );
     return result.data;
   } catch (error) {
@@ -93,12 +71,9 @@ const acceptFriendRequest = async (userId) => {
 
 const denyFriendRequest = async (userId) => {
   try {
-    const result = await axios.patch(
-      `${URL_API}/friend-request/deny/${userId}`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${getAccessToken()}` },
-      }
+    const result = await axiosInstance.patch(
+      `user/friend-request/deny/${userId}`,
+      {}
     );
     return result.data;
   } catch (error) {
@@ -108,9 +83,50 @@ const denyFriendRequest = async (userId) => {
 
 const getUserFriends = async (userId) => {
   try {
-    const result = await axios.get(`${URL_API}/friends/${userId}`, {
-      headers: { Authorization: `Bearer ${getAccessToken()}` },
-    });
+    const result = await axiosInstance.get(`user/friends/${userId}`);
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
+const updateAvatar = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("profilePicture", file);
+    const result = await axiosInstance.patch("user/profilePicture", formData);
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
+const deleteAvatar = async () => {
+  try {
+    const result = await axiosInstance.patch("user/delete/avatar");
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
+const updateBackground = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("backgroundPicture", file);
+    const result = await axiosInstance.patch(
+      "user/backgroundPicture",
+      formData
+    );
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
+const deleteBackground = async () => {
+  try {
+    const result = await axiosInstance.patch("user/delete/background");
     return result.data;
   } catch (error) {
     return error.response?.data;
@@ -127,4 +143,8 @@ export {
   denyFriendRequest,
   updateUserAbout,
   getUserFriends,
+  updateAvatar,
+  deleteAvatar,
+  updateBackground,
+  deleteBackground,
 };

@@ -15,6 +15,7 @@ function Header() {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     navigate("/");
   };
 
@@ -69,7 +70,7 @@ function Header() {
             trigger="mouseenter focus click"
           >
             <div>
-              <Avatar image={user?.profilePicture} pdl />
+              <Avatar image={user?.profilePicture || images.avatar} pdl />
             </div>
           </Tippy>
         </div>
