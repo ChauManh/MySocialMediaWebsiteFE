@@ -16,13 +16,13 @@ function ProfileFriendList() {
 
   useEffect(() => {
     const fetchFriends = async () => {
-      try {
-        const res = await getUserFriends(userId);
-        if (res.EC === 0) {
-          setFriends(res.result);
+      const res = await getUserFriends(userId);
+      if (res.EC === 0) {
+        let friendsList = res.result;
+        if (!isCurrentUser) {
+          friendsList = friendsList.filter((f) => f._id !== user?._id);
         }
-      } catch (err) {
-        console.error(err);
+        setFriends(friendsList);
       }
     };
     fetchFriends();
@@ -30,11 +30,11 @@ function ProfileFriendList() {
 
   return (
     <div className={cx("wrapper")}>
-      <h2>{isCurrentUser ? "Bạn bè của bạn" : "Danh sách bạn bè"}</h2>
+      <h2>{isCurrentUser ? "Bạn bè của bạn" : "Danh sách bạn chung"}</h2>
       <div className={cx("list")}>
         {friends?.length > 0 ? (
           friends.map((friend) => (
-            <FriendCard key={friend._id} data={friend} />
+            <FriendCard key={friend._id} userData={friend} />
           ))
         ) : (
           <p>Chưa có bạn bè nào.</p>

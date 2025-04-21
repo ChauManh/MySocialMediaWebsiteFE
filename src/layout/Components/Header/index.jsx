@@ -7,16 +7,25 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Avatar from "../../../components/Avatar";
 import { useAuth } from "../../../contexts/authContext";
+import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function Header() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const [keyword, setKeyword] = useState();
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
+    setUser(null);
     navigate("/");
+  };
+
+  const handleSearch = () => {
+    if (keyword) {
+      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+    }
   };
 
   const handleProfile = () => {
@@ -36,10 +45,16 @@ function Header() {
         </div>
 
         <div className={cx("search-bar")}>
-          <button className={cx("search-btn")}>
+          <button className={cx("search-btn")} onClick={handleSearch}>
             <i className="bi bi-search"></i>
           </button>
-          <input type="text" placeholder="Search accounts or posts..." />
+          <input
+            type="text"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            placeholder="Tìm bạn bè hoặc bài viết..."
+          />
         </div>
 
         <div className={cx("menu")}>

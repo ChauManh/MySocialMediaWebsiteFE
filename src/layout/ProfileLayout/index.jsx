@@ -189,7 +189,6 @@ function ProfileLayout({ children }) {
             toast.success(result.EM);
           } else {
             toast.error(result.EM);
-            setTimeout(() => window.location.reload(), 1000);
           }
           break;
 
@@ -200,7 +199,6 @@ function ProfileLayout({ children }) {
             toast.success(result.EM);
           } else {
             toast.error(result.EM);
-            setTimeout(() => window.location.reload(), 1000);
           }
           break;
 
@@ -215,7 +213,6 @@ function ProfileLayout({ children }) {
             toast.success(result.EM);
           } else {
             toast.error(result.EM);
-            setTimeout(() => window.location.reload(), 1000);
           }
           break;
 
@@ -231,7 +228,6 @@ function ProfileLayout({ children }) {
             toast.success(result.EM);
           } else {
             toast.error(result.EM);
-            setTimeout(() => window.location.reload(), 1000);
           }
           break;
 
@@ -242,7 +238,6 @@ function ProfileLayout({ children }) {
             toast.success(result.EM);
           } else {
             toast.error(result.EM);
-            setTimeout(() => window.location.reload(), 1000);
           }
           break;
 
@@ -277,7 +272,12 @@ function ProfileLayout({ children }) {
                   <Button small primary onClick={handleOpenFileDialog}>
                     Sửa ảnh bìa
                   </Button>
-                  <Button small outline onClick={handleDeleteBackground}>
+                  <Button
+                    small
+                    outline
+                    onClick={handleDeleteBackground}
+                    className="btn-no-margin-left"
+                  >
                     Xóa ảnh bìa
                   </Button>
                 </>
@@ -305,7 +305,12 @@ function ProfileLayout({ children }) {
                     <Button small primary onClick={handleOpenFileDialog}>
                       Sửa ảnh đại diện
                     </Button>
-                    <Button small outline onClick={handleDeleteAvatar}>
+                    <Button
+                      small
+                      outline
+                      onClick={handleDeleteAvatar}
+                      className="btn-no-margin-left"
+                    >
                       Xóa ảnh đại diện
                     </Button>
                   </>
@@ -372,9 +377,7 @@ function ProfileLayout({ children }) {
             <Button
               small
               className={
-                currentPath === `/profile/${userId}`
-                  ? "primary"
-                  : "outline"
+                currentPath === `/profile/${userId}` ? "primary" : "outline"
               }
             >
               Bài viết

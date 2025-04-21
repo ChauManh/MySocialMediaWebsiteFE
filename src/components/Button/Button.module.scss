@@ -11,14 +11,18 @@
   background-color: var(--white);
   z-index: 3;
 
-  // + .wrapper {
-  //   margin-left: 8px;
-  // } // Css selector nut dung sau cach nut dung truoc
+  + .wrapper {
+    margin-left: 8px;
+  } // Css selector nut dung sau cach nut dung truoc
 
   &.disabled {
     pointer-events: none;
     opacity: 0.5;
   }
+}
+
+.btn-no-margin-left {
+  margin-left: 0 !important;
 }
 
 .icon + .title,
@@ -54,6 +58,7 @@
   background-color: var(--primary);
   cursor: pointer;
   border-color: var(--black);
+  // min-width: 240px;
 
   &:hover {
     border-color: var(--primary);

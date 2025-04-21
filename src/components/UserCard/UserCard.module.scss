@@ -1,0 +1,49 @@
+.userItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  // margin: 12px;
+  border: 1px solid var(--primary);
+  border-radius: 16px;
+  // transition: background 0.2s ease;
+  width: 40%;
+
+  &:hover {
+    background: #f9f9f9;
+  }
+}
+
+.info {
+  flex: 1;
+
+  h4 {
+    font-size: 20px;
+    margin-bottom: 2px;
+    &:hover {
+      color: var(--primary);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+
+  p {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .friendCount {
+    font-size: 12px;
+  }
+}
+
+.mutual {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.friendCount {
+  font-size: 0.85rem;
+  color: #666;
+}

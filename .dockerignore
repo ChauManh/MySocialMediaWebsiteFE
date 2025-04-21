@@ -1,0 +1,28 @@
+# Node modules
+node_modules
+
+# Logs
+*.log
+
+# Tệp tạm thời, cache
+.DS_Store
+npm-debug.log
+yarn-error.log
+
+# Tệp cấu hình hệ thống IDE
+.vscode
+.idea
+*.iml
+
+# Build output
+/dist
+/build
+
+# Tệp cấu hình cá nhân
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Thư mục tạm thời
+tmp

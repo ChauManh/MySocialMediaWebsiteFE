@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
       try {
         setIsLoading(true);
         const userInfo = await getOwnerUserInfo();
-        if (userInfo.EC ===0) {
+        if (userInfo.EC === 0) {
           setIsLoading(false);
         } else {
           setIsLoading(false);
@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
         }
         setUser(userInfo.result);
       } catch (error) {
-        console.log(error);
         setIsLoading(false);
         return error.response?.data;
       }
