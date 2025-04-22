@@ -1,31 +1,55 @@
 import classNames from "classnames/bind";
 import styles from "./PostItem.module.scss";
 import Avatar from "../Avatar";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import CommentItem from "../CommentItem";
 import formatDate from "../../utils/formatDate";
 import images from "../../assets/images";
+import Button from "../Button";
+import { useAuth } from "../../contexts/authContext";
+import { deletePost, likePost } from "../../services/postApi";
+import toast from "react-hot-toast";
 
 const cx = classNames.bind(styles);
-function PostItem({
-  avatar,
-  name,
-  createdAt,
-  description,
-  media,
-  emoCount,
-  commentCount,
-  comments = [],
-  liked = false,
-  saved = false,
-}) {
-  const [isLiked, setLike] = useState(liked);
-  const [isSaved, setSave] = useState(saved);
-  const [likeCount, setLikeCount] = useState(emoCount);
+function PostItem({ postData, onDelete }) {
+  const { user } = useAuth();
+  const [isLiked, setLike] = useState(postData?.likes?.includes(user._id));
+  const [isSaved, setSave] = useState(false);
+  const [likeCount, setLikeCount] = useState(postData?.likes?.length);
+  const [showDeleteOption, setShowDeleteOption] = useState(false);
+  const [commentCount, setCommentCount] = useState(postData?.comments?.length);
 
-  const handleLike = () => {
-    setLike(!isLiked);
-    setLikeCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1));
+  const handleLike = async () => {
+    const res = await likePost(postData._id);
+    if (res.EC === 0) {
+      setLikeCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1));
+      setLike(!isLiked);
+    } else toast.error(res.EM);
+  };
+
+  const moreOptionsRef = useRef(null); // ref vùng chứa
+  const handleClickOutside = (event) => {
+    if (
+      moreOptionsRef.current &&
+      !moreOptionsRef.current.contains(event.target)
+    ) {
+      setShowDeleteOption(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleDeletePost = async () => {
+    const res = await deletePost(postData._id);
+    if (res.EC === 0) {
+      onDelete?.(postData._id);
+      toast.success(res.EM);
+    } else toast.error(res.EM);
   };
 
   const handleSave = () => {
@@ -36,32 +60,49 @@ function PostItem({
     <div className={cx("wrapper")}>
       <div className={cx("topBar")}>
         <div className={cx("infoWrapper")}>
-          <Avatar image={avatar || images.avatar} />
+          <Avatar image={postData?.authorId?.profilePicture || images.avatar} />
           <div className={cx("info")}>
             <a href="/home" className={cx("name")}>
-              {name}
+              {postData?.authorId?.fullname}
             </a>
-            <span className={cx("createdAt")}>{formatDate(createdAt)}</span>
+            <span className={cx("createdAt")}>
+              {formatDate(postData?.createdAt)}
+            </span>
           </div>
         </div>
-        <button className={cx("moreOptionsBtn")}>
-          <i className="bi bi-three-dots"></i>
-        </button>
+        <div className={cx("moreOptionsWrapper")} ref={moreOptionsRef}>
+          <button
+            className={cx("moreOptionsBtn")}
+            onClick={() => setShowDeleteOption(!showDeleteOption)}
+          >
+            <i className="bi bi-three-dots"></i>
+          </button>
+          {showDeleteOption && (
+            <Button
+              small
+              primary
+              onClick={handleDeletePost}
+              className={cx("buttonDelete")}
+            >
+              Xóa
+            </Button>
+          )}
+        </div>
       </div>
       <div className={cx("content")}>
-        <p className={cx("description")}>{description}</p>
-        {media.length > 0 && (
+        <p className={cx("description")}>{postData?.content}</p>
+        {postData?.images?.length > 0 && (
           <div
             className={cx(
               "media",
-              media.length === 1
+              postData?.images?.length === 1
                 ? "single"
-                : media.length === 2
+                : postData?.images?.length === 2
                   ? "double"
                   : "multiple"
             )}
           >
-            {media.map((item, index) =>
+            {postData?.images.map((item, index) =>
               item.type === "video" ? (
                 <video
                   key={`video-${index}`}
@@ -102,11 +143,11 @@ function PostItem({
             className={`bi ${isLiked ? "bi-hand-thumbs-up-fill" : "bi-hand-thumbs-up"}`}
           >
             {" "}
-            Likes
+            Thích
           </i>
         </button>
         <button className={cx("commentBtn")}>
-          <i className="bi bi-chat-right-dots"> Comments</i>
+          <i className="bi bi-chat-right-dots"> Bình luận</i>
         </button>
         <button
           className={cx("saveBtn", { saved: isSaved })}
@@ -114,11 +155,11 @@ function PostItem({
         >
           <i className={`bi ${isSaved ? "bi-bookmark-fill" : "bi-bookmark"}`}>
             {" "}
-            Saves
+            Lưu
           </i>
         </button>
       </div>
-      {comments.length > 0 ? (
+      {commentCount > 1 ? (
         <div className={cx("commentSection")}>
           {/* Nút "Hiển thị tất cả bình luận" */}
           <button className={cx("showCommentsBtn")}>
@@ -126,7 +167,7 @@ function PostItem({
           </button>
 
           {/* Hiển thị 1 bình luận đầu tiên */}
-          {comments.slice(0, 1).map((comment) => (
+          {postData?.comments.slice(0, 1).map((comment) => (
             <CommentItem
               key={comment._id}
               avatar={comment.userId.profilePicture}
@@ -138,7 +179,7 @@ function PostItem({
         </div>
       ) : (
         <div className={cx("commentSection")}>
-        <div className={cx("noComments")}>Chưa có bình luận nào.</div>
+          <div className={cx("noComments")}>Chưa có bình luận nào.</div>
         </div>
       )}
     </div>

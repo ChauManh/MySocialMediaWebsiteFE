@@ -44,7 +44,7 @@ function ProfileBioAndPost() {
       setNewBio(userProfile.about || "");
       setIsEditingBio(true);
     } else {
-      toast.error("Bạn không thể sửa tiểu sử của người khác.");
+      toast.error("Bạn không thể sửa tiểu sử của người khác");
     }
   };
 
@@ -53,24 +53,26 @@ function ProfileBioAndPost() {
   };
 
   const handleSaveBio = async () => {
-    try {
-      if (newBio === userProfile.about) {
-        setIsEditingBio(false);
-        return;
-      }
-      const result = await updateUserAbout(newBio);
-      console.log(result);
-      if (result.EC == 0) {
-        toast.success(result.EM);
-        setUserProfile((prev) => ({ ...prev, about: newBio }));
-        setIsEditingBio(false);
-      } else {
-        setIsEditingBio(false);
-        toast.error(result.EM);
-      }
-    } catch (error) {
-      toast.error(error.message || "Lỗi ngoài server khi cập nhật tiểu sử.");
+    if (newBio === userProfile.about) {
+      setIsEditingBio(false);
+      return;
     }
+    const result = await updateUserAbout(newBio);
+    console.log(result);
+    if (result.EC == 0) {
+      toast.success(result.EM);
+      setUserProfile((prev) => ({ ...prev, about: newBio }));
+      setIsEditingBio(false);
+    } else {
+      setIsEditingBio(false);
+      toast.error(result.EM);
+    }
+  };
+
+  const handleDelete = (postId) => {
+    setUserPosts((prevPosts) =>
+      prevPosts.filter((post) => post._id !== postId)
+    );
   };
 
   return (
@@ -118,23 +120,15 @@ function ProfileBioAndPost() {
         </div>
 
         <div className={cx("postContainer")}>
-        {isCurrentUserProfile && <Statusbar onPostSuccess={fetchPosts} />}
+          {isCurrentUserProfile && <Statusbar onPostSuccess={fetchPosts} />}
 
           <h2>Bài viết gần đây</h2>
           {userPosts.length > 0 ? (
-            userPosts.map((post, index) => (
+            userPosts.map((post) => (
               <PostItem
-                key={post._id || index}
-                avatar={post?.authorId.profilePicture}
-                name={post?.authorId.fullname}
-                comments={post.comments}
-                createdAt={post.createdAt}
-                description={post.content}
-                media={post.images || []}
-                emoCount={post.likes.length}
-                commentCount={post.comments.length}
-                liked={post.liked}
-                saved={post.saved}
+                key={post._id}
+                postData={post}
+                onDelete={handleDelete}
               />
             ))
           ) : (

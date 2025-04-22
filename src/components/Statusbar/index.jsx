@@ -34,12 +34,10 @@ function Statusbar({ onPostSuccess }) {
   };
 
   const handleSubmitPost = async () => {
-    console.log("Content:", content);
-    console.log("Image file:", imageFiles);
     const postData = new FormData();
     postData.append("content", content);
     if (imageFiles && imageFiles.length > 0) {
-      imageFiles.forEach((img, index) => {
+      imageFiles.forEach((img) => {
         postData.append("post", img); // Lưu từng ảnh vào FormData
       });
     }

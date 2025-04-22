@@ -1,56 +1,35 @@
 import classNames from "classnames/bind";
 import styles from "./Home.module.scss";
 import PostItem from "../../components/PostItem";
-import { useAuth } from "../../contexts/authContext";
 import Statusbar from "../../components/Statusbar";
 import { useEffect, useState } from "react";
-import { getPosts } from "../../services/postApi";
-import images from "../../assets/images";
+import { getPostsToDisplay } from "../../services/postApi";
+import toast from "react-hot-toast";
 const cx = classNames.bind(styles);
 
 function Home() {
-  const { user } = useAuth();
-  const [userPosts, setUserPosts] = useState([]);
+  const [Posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const fetchUserPosts = async () => {
-      if (!user?.userId) return; // Nếu chưa có user thì không fetch
-
-      try {
-        const result = await getPosts(user.userId);
-        setUserPosts(result.result);
-      } catch (error) {
-        alert(error.message);
-        // console.error("Error fetching posts:", error);
-      }
+    const fetchPosts = async () => {
+      const result = await getPostsToDisplay();
+      if (result.EC === 0) {
+        setPosts(result.result);
+      } else toast.error(result?.EM);
     };
-
-    fetchUserPosts();
-  }, [user]);
+    fetchPosts();
+  }, []);
 
   return (
     <div className={cx("wrapper")}>
       <Statusbar> </Statusbar>
-
       <div className={cx("postContainer")}>
-        {userPosts?.length > 0 ? (
-          userPosts.map((post, index) => (
-            <PostItem
-              key={post._id || index}
-              avatar={post.authorId.profilePicture || images.avatar}
-              name={post.authorId.fullname}
-              comments={post.comments}
-              createdAt={post.createdAt}
-              description={post.content}
-              media={post.image}
-              emoCount={post.likes.length}
-              commentCount={post.comments.length}
-              liked={post.liked}
-              saved={post.saved}
-            />
-          ))
+        {Posts?.length > 0 ? (
+          Posts.map((post) => <PostItem key={post._id} postData={post} />)
         ) : (
-          <p className={cx("noPosts")}>Chưa có bài viết nào.</p>
+          <p className={cx("noPosts")}>
+            Hãy kết bạn để xem thêm nhiều bài viết.
+          </p>
         )}
       </div>
     </div>

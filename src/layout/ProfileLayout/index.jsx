@@ -44,9 +44,9 @@ function ProfileLayout({ children }) {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        setIsLoading(true);
-        const userInfo = await getUserInfo(userId);
+      setIsLoading(true);
+      const userInfo = await getUserInfo(userId);
+      if (userInfo.EC === 0) {
         setIsFriend(userInfo.result.friends.includes(user?._id));
         setHasSentReq(
           userInfo.result.friendRequests?.received.includes(user?._id)
@@ -55,11 +55,10 @@ function ProfileLayout({ children }) {
           userInfo.result.friendRequests?.sent.includes(user?._id)
         );
         setUserProfile(userInfo.result);
-      } catch (error) {
-        toast.error(error.message || "Lỗi khi tải thông tin người dùng.");
-      } finally {
-        setIsLoading(false);
+      } else {
+        toast.error(userInfo.EM);
       }
+      setIsLoading(false);
     };
     fetchUserInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -242,11 +241,11 @@ function ProfileLayout({ children }) {
           break;
 
         default:
-          toast.error("Hành động không hợp lệ.");
+          toast.error("Hành động không hợp lệ");
           return;
       }
     } catch (error) {
-      toast.error(error.message || "Lỗi không xác định.");
+      toast.error(error.message || "Lỗi hệ thống");
     }
   };
 

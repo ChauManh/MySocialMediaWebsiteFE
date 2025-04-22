@@ -1,5 +1,5 @@
 import logo from '../images/logo.png';
-import avatar from '../images/avatar.png';
+import avatar from '../images/avatar.jpg';
 import empty from '../images/empty.png';
 
 const images = {
