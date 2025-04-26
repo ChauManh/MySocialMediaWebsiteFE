@@ -35,29 +35,20 @@ function SignIn() {
       return;
     }
 
-    try {
-      const result = await loginApi(form.email, form.password);
-      // Lưu jwt token
-      if (result.EC == 0) {
-        localStorage.setItem("access_token", result.result.access_token);
-        localStorage.setItem("refresh_token", result.result.refresh_token);
-        toast.success(result.EM, {
-          duration: 1000,
-          position: "top-right",
-        });
-        setTimeout(() => {
-          window.location.href = "/home";
-        }, 1000);
-      } else {
-        toast.error(result.EM, {
-          duration: 2000,
-          position: "top-right",
-        });
-        return 0;
-      }
-    } catch (err) {
-      const errorMessage = err.response?.data?.error;
-      toast.error(errorMessage, {
+    const result = await loginApi(form.email, form.password);
+    // Lưu jwt token
+    if (result.EC == 0) {
+      localStorage.setItem("access_token", result.result.access_token);
+      localStorage.setItem("refresh_token", result.result.refresh_token);
+      toast.success(result.EM, {
+        duration: 1000,
+        position: "top-right",
+      });
+      setTimeout(() => {
+        window.location.href = "/home";
+      }, 1000);
+    } else {
+      toast.error(result.EM, {
         duration: 2000,
         position: "top-right",
       });

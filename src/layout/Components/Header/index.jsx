@@ -8,18 +8,25 @@ import "tippy.js/dist/tippy.css";
 import Avatar from "../../../components/Avatar";
 import { useAuth } from "../../../contexts/authContext";
 import { useState } from "react";
+import NotificationBar from "../../../components/NotificationBar";
 
 const cx = classNames.bind(styles);
 
 function Header() {
   const { user, setUser } = useAuth();
-  const [keyword, setKeyword] = useState();
+  const [keyword, setKeyword] = useState('');
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
+
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     setUser(null);
     navigate("/");
+  };
+
+  const handlePressLogo = () => {
+    window.location.href = "/home";
   };
 
   const handleSearch = () => {
@@ -37,9 +44,9 @@ function Header() {
       <div className={cx("inner")}>
         <div className={cx("menu")}>
           <div className={cx("logo")}>
-            <Link to="/home">
+            <button onClick={handlePressLogo}>
               <img src={images.logo} alt="Logo" />
-            </Link>
+            </button>
           </div>
           <span className={cx("webName")}>MT.SOCIAL.MEDIA</span>
         </div>
@@ -64,11 +71,18 @@ function Header() {
             </Button>
           </Tippy>
 
-          <Tippy content="Notifications" placement="bottom">
-            <Button circle>
-              <i className="bi bi-bell-fill"></i>
-            </Button>
-          </Tippy>
+          <div className={cx("notification-wrapper")}>
+            <Tippy content="Notifications" placement="bottom">
+              <Button
+                circle
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
+                <i className="bi bi-bell-fill"></i>
+              </Button>
+            </Tippy>
+
+            {showNotifications && <NotificationBar />}
+          </div>
           <Tippy
             content={
               <div className={cx("user-menu")}>

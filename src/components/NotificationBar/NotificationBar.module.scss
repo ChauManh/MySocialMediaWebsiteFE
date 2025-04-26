@@ -1,0 +1,56 @@
+.notification-bar {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  width: 320px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 12px;
+
+  max-height: calc(5 * 80px + 50px);
+  overflow-y: auto;
+
+  /* Scroll mượt */
+  scroll-behavior: smooth;
+
+  /* Ẩn scrollbar mặc định */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.notification-bar::-webkit-scrollbar {
+  width: 0px; /* Chrome, Safari */
+}
+
+/* Khi hover vào notification-bar thì hiện scrollbar */
+.notification-bar:hover {
+  scrollbar-width: thin;
+}
+.notification-bar:hover::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notification-bar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+.notification-bar:hover::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notification-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #333;
+}
+
+.no-notifications {
+  text-align: center;
+  color: #888;
+  padding: 20px 0;
+}

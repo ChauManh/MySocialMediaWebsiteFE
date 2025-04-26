@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getOwnerUserInfo } from "../services/userApi";
 import { useLoading } from "./loadingContext";
 import toast from "react-hot-toast";
+import { registerUserSocket } from "../services/socketService";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         const userInfo = await getOwnerUserInfo();
         if (userInfo.EC === 0) {
           setUser(userInfo.result);
+          registerUserSocket(userInfo.result._id);
         } else {
           toast.error(userInfo.EM);
         }

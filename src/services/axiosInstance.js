@@ -21,15 +21,11 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response.status === 401) {
-      try {
-        const res = await refreshToken();
-        if (res.EC === 0) {
-            localStorage.setItem("access_token", res.result.accessToken);
-          error.config.headers["Authorization"] = `Bearer ${res.accessToken}`;
-          return axiosInstance(error.config);  // Thực hiện lại request với token mới
-        }
-      } catch (err) {
-        console.error("Error refreshing token", err);
+      const res = await refreshToken();
+      if (res.EC === 0) {
+        localStorage.setItem("access_token", res.result.access_token);
+        error.config.headers["Authorization"] = `Bearer ${res.access_token}`;
+        return axiosInstance(error.config); // Thực hiện lại request với token mới
       }
     }
     return Promise.reject(error);
