@@ -1,22 +1,133 @@
-.wrapper {
-  padding-bottom: 12px;
+@use "sass:map";
+
+// Breakpoints SCSS
+$breakpoints: (
+  xs: 480px,  // thêm mobile siêu nhỏ
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+@mixin respond-to($size) {
+  @if map.has-key($breakpoints, $size) {
+    @media (min-width: map.get($breakpoints, $size)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint `#{$size}` không tồn tại.";
+  }
 }
 
-.wrapper input {
-  border: 2px solid var(--primary);
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 18px;
-  box-sizing: border-box;
-  height: 50px;
-  width: 320px;
-  min-width: 80px;
+// ----------------------------
+// Input Base
+// ----------------------------
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 16px;
+  position: relative;
 
-  &:hover {
-    border-color: var(--black);
+  input {
+    width: 100%;
+    max-width: 320px;
+    min-width: 80px;
+    height: 44px;
+    padding: 10px 14px;
+    font-size: 1.4rem; // mobile mặc định
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    background-color: var(--white);
+    box-sizing: border-box;
+    transition:
+      border-color 0.25s ease,
+      background-color 0.25s ease,
+      box-shadow 0.25s ease;
+
+    &::placeholder {
+      color: rgba(22, 24, 35, 0.5);
+      font-size: 1.2rem;
+    }
+
+    &:hover {
+      border-color: var(--black);
+    }
+
+    &:focus {
+      border-color: var(--black);
+      background-color: rgba(0, 0, 0, 0.02);
+      box-shadow: 0 0 0 4px rgba(109, 172, 250, 0.2);
+    }
+
+    &:disabled {
+      background-color: #f5f5f5;
+      pointer-events: none;
+      color: #b3b3b3;
+    }
+
+    // Responsive từ Tablet trở lên
+    @include respond-to(sm) {
+      max-width: 340px;
+      height: 46px;
+      font-size: 1.5rem;
+
+      &::placeholder {
+        font-size: 1.4rem;
+      }
+    }
+
+    @include respond-to(md) {
+      max-width: 360px;
+      height: 50px;
+      font-size: 1.6rem;
+    }
+
+    @include respond-to(lg) {
+      max-width: 400px;
+      height: 52px;
+      font-size: 1.8rem;
+    }
   }
+}
+
+// ----------------------------
+// Input States (Validation)
+// ----------------------------
+.input-error input {
+  border-color: red;
 
   &:focus {
-    border-color: var(--black);
+    box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.2);
+  }
+}
+
+.input-success input {
+  border-color: green;
+
+  &:focus {
+    box-shadow: 0 0 0 4px rgba(0, 128, 0, 0.2);
+  }
+}
+
+// ----------------------------
+// Icon Support (nếu cần có icon bên trong input sau này)
+// ----------------------------
+.has-icon {
+  position: relative;
+
+  input {
+    padding-left: 40px;
+  }
+
+  .input-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    opacity: 0.7;
   }
 }

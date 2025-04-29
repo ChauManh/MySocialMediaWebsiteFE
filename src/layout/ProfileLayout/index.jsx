@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import Header from "../Components/Header";
 import styles from "./ProfileLayout.module.scss";
 import { useAuth } from "../../contexts/authContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import images from "../../assets/images";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -21,7 +21,6 @@ import {
 } from "../../services/userApi";
 import toast from "react-hot-toast";
 import Button from "../../components/Button";
-import { useRef } from "react";
 import { useLoading } from "../../contexts/loadingContext";
 
 const cx = classNames.bind(styles);

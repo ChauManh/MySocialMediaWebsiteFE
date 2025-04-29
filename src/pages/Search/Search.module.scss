@@ -1,8 +1,11 @@
 .searchPage {
   padding: 20px;
-//   max-width: 800px;
   margin: 0 auto;
   height: 100%;
+  max-width: 1024px;
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 }
 
 .title {
@@ -10,16 +13,20 @@
   font-weight: bold;
   padding-bottom: 20px;
   color: #333;
+  text-align: center;
 }
 
 .resultsList {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
   align-items: center;
 }
 
 .noResult {
   font-style: italic;
   color: #777;
+  text-align: center;
+  margin-top: 20px;
 }

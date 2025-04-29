@@ -22,8 +22,8 @@ function Home() {
 
   return (
     <div className={cx("wrapper")}>
-      <Statusbar> </Statusbar>
       <div className={cx("postContainer")}>
+        <Statusbar> </Statusbar>
         {Posts?.length > 0 ? (
           Posts.map((post) => <PostItem key={post._id} postData={post} />)
         ) : (

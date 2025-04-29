@@ -1,13 +1,63 @@
 .wrapper {
   border: 0.5px solid var(--primary);
   border-radius: 12px;
-  // background-color: antiquewhite;
   width: 100%;
-  margin: auto;
-  margin-top: 16px;
+  margin: 16px auto 0;
   overflow: hidden;
-  // max-height: 850px;
-  // max-width: 50%;
+  max-width: 800px; /* Desktop sẽ giới hạn max-width */
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%; /* Mobile chiếm gần hết chiều rộng */
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.commentInputWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #fefefe;
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--primary);
+  }
+
+  input {
+    flex: 1;
+    min-height: 36px;
+    resize: none;
+    font-size: 14px;
+    font-family: inherit;
+    border-radius: 20px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+  }
+
+  button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 }
 
 .topBar {
@@ -26,6 +76,7 @@
   flex-direction: column;
   font-size: 2rem;
   font-weight: 600;
+  padding-left: 12px;
 }
 
 .createdAt {
@@ -64,24 +115,21 @@
 
 .media {
   display: grid;
-  gap: 12px; /* Khoảng cách giữa các media items */
+  gap: 12px;
   padding-top: 12px;
   margin-bottom: 12px;
 }
 
 .media.single {
-  grid-template-columns: 1fr; /* 1 ảnh chiếm toàn bộ chiều rộng */
+  grid-template-columns: 1fr;
 }
 
 .media.double {
-  grid-template-columns: 1fr 1fr; /* 2 ảnh chia đôi không gian */
+  grid-template-columns: 1fr 1fr;
 }
 
 .media.multiple {
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(100px, 1fr)
-  ); /* Nhiều ảnh, tự động chia */
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .mediaItem {
@@ -89,8 +137,7 @@
   border-radius: 8px;
   object-fit: cover;
   width: 100%;
-  height: 100%; /* Đảm bảo media vừa khít */
-  // max-height: 450px; /* Giới hạn chiều cao */
+  height: 100%;
 }
 
 .postStatus {
@@ -100,19 +147,10 @@
   font-size: 14px;
 }
 
-.emoCount {
-  margin-left: 4px;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
+.emoCount,
 .commentCount {
-  margin-right: 4px;
+  padding: 4px;
   cursor: pointer;
-
   &:hover {
     text-decoration: underline;
   }
@@ -123,32 +161,36 @@
   margin: 12px;
   justify-content: space-between;
   position: relative;
-  font-size: 14px;
+  font-size: 1.4rem;
 
-  &::after {
-    content: "";
-    height: 1px;
-    width: 100%;
-    background-color: var(--primary);
-    position: absolute;
-    top: -4px;
+  @media screen and (min-width: 768px) {
+    font-size: 1.6rem;
   }
 
+  &::after,
   &::before {
     content: "";
     height: 1px;
     width: 100%;
     background-color: var(--primary);
     position: absolute;
+  }
+
+  &::after {
+    top: -4px;
+  }
+
+  &::before {
     bottom: -4px;
   }
 }
 
 .actions button {
   background-color: transparent;
+  cursor: pointer;
 
   &:active {
-    scale: 1.1;
+    transform: scale(1.1);
   }
 
   &:hover {
@@ -156,16 +198,9 @@
   }
 }
 
-.likeBtn {
-  &.liked {
-    color: var(--primary);
-  }
-}
-
-.saveBtn {
-  &.saved {
-    color: var(--primary);
-  }
+.likeBtn.liked,
+.saveBtn.saved {
+  color: var(--primary);
 }
 
 .commentSection {
@@ -176,10 +211,7 @@
   background-color: transparent;
   font-size: 16px;
   margin-bottom: 8px;
-
-  &:active {
-    scale: 1.1;
-  }
+  cursor: pointer;
 
   &:hover {
     color: var(--primary);

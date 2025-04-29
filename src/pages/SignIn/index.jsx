@@ -3,14 +3,22 @@ import styles from "./SignIn.module.scss";
 import images from "../../assets/images";
 import Input from "../../components/InputItem";
 import Button from "../../components/Button";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { loginApi } from "../../services/authApi.js";
-
+import { useAuth } from "../../contexts/authContext.jsx";
 const cx = classNames.bind(styles);
 
 function SignIn() {
+  const navigate = useNavigate();
+  const { token } = useAuth();
+  useEffect(() => {
+    if (token) {
+      navigate("/home");
+    }
+  }, [token, navigate]);
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -34,7 +42,8 @@ function SignIn() {
       });
       return;
     }
-
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     const result = await loginApi(form.email, form.password);
     // Lưu jwt token
     if (result.EC == 0) {
@@ -60,7 +69,7 @@ function SignIn() {
     <div className={cx("wrapper")}>
       <div className={cx("webDescription")}>
         <img src={images.logo} alt="Logo" className={cx("logo")} />
-        <span className={cx("slogan")}>THIS IS MY SOCIAL MEDIA WEBSITE</span>
+        <span className={cx("slogan")}>THIS IS MY FIRST FULLSTACK PROJECT</span>
       </div>
       <form onSubmit={handleSignIn} className={cx("formWrapper")}>
         <div className={cx("infoWrapper")}>
@@ -76,7 +85,7 @@ function SignIn() {
             name="password"
             placeholder="Password"
             onChange={onUpdateField}
-            Autocomplete="current-password"
+            autocomplete="current-password"
           />
           <div className={cx("actions")}>
             <Button type="submit" primary className={cx("signInBtn")}>

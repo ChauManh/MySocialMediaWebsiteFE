@@ -1,11 +1,86 @@
-.wrapper {
-  height: 100%;
-  width: 25%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  padding-top: calc(var(--default-layout-header-height) + 30px);
-  padding-left: 12px;
+@use "sass:map";
 
-  overflow-y: auto;
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+@mixin respond-to($size) {
+  @if map.has-key($breakpoints, $size) {
+    @media (min-width: map.get($breakpoints, $size)) {
+      @content;
+    }
+  }
+}
+
+.wrapper {
   position: fixed;
-  z-index: 2;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 240px;
+  padding-top: calc(var(--default-layout-header-height) + 20px);
+  padding-left: 12px;
+  background-color: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.06);
+  overflow-y: auto;
+  z-index: 5;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    width: 260px;
+  }
+
+  @include respond-to(lg) {
+    width: 280px;
+  }
+
+  // Khi bị thu gọn (collapsed)
+  &.collapsed {
+    width: 72px;
+    padding-left: 6px;
+
+    :global(.label) {
+      display: none;
+    }
+
+    :global(.icon) {
+      padding-left: 0;
+      padding-right: 0;
+      margin: 0 auto;
+    }
+
+    :global(.wrapper) {
+      justify-content: center;
+    }
+  }
+
+  // Ẩn trên mobile nếu cần
+  @media screen and (max-width: 576px) {
+    display: none;
+  }
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--primary);
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  display: flex;
+  justify-content: flex-end;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 }

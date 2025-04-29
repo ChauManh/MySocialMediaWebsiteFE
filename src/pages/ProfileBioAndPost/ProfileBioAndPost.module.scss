@@ -1,102 +1,15 @@
 .profileContainer {
   width: 80%;
-  display: flex;
   margin: 2px auto;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
   background-color: #fff;
   padding-bottom: 32px;
-}
 
-.coverPhotoContainer {
-  width: 100%;
-  height: 460px;
-  position: relative;
-
-  img {
+  @media (max-width: 768px) {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
-}
-
-.profileHeader {
-  display: flex;
-  align-items: center;
-  margin-top: -60px;
-  width: 100%;
-  border-bottom: var(--primary) solid 1px;
-  padding-bottom: 10px;
-  z-index: 2;
-
-  .avatar {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid white;
-    margin-right: 16px;
-    margin-left: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-    }
-    &:active {
-      transform: scale(1);
-    }
-  }
-}
-
-.nameAndAction {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-  flex-wrap: wrap; // cho responsive
-  padding-top: 40px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 10px;
-  }
-}
-
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 16px;
-
-  h1 {
-    font-size: 26px;
-    font-weight: 600;
-    margin: 0;
-    margin-bottom: 4px;
-  }
-
-  span {
-    color: #666;
-    font-size: 14px;
-  }
-}
-
-.actionButtons {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  padding-right: 16px;
-
-  @media (max-width: 768px) {
-    margin-left: 0;
-    padding-right: 0;
+    padding: 0 12px 32px;
   }
 }
 
@@ -104,23 +17,20 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  // max-width: 1000px;
-  // padding: 0 20px;
+  flex-wrap: wrap; // responsive
 
   .bio,
   .postContainer {
-    width: 70%;
     background-color: #f9f9f9;
     padding: 16px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-
+    margin-top: 16px;
 
     h2 {
       font-size: 18px;
       margin-bottom: 8px;
       color: #333;
-      padding-top: 16px;
     }
 
     p {
@@ -133,34 +43,20 @@
   .bio {
     width: 30%;
     margin-right: 16px;
-  }
 
-  @media (min-width: 768px) {
-    flex-wrap: nowrap;
-
-    .bio {
-      width: 30%;
-      margin-right: 16px;
-    }
-
-    .postContainer {
-      width: 70%;
+    @media (max-width: 768px) {
+      width: 100%;
+      margin-right: 0;
     }
   }
-}
 
-.editBtn {
-  margin-left: 8px;
-}
+  .postContainer {
+    width: 68%;
 
-.editCoverBtn {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-.avatarWrapper {
-  position: relative;
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
 }
 
 .bioHeader {
@@ -170,16 +66,8 @@
   padding-bottom: 8px;
 }
 
-.noPosts {
-  text-align: center;
-  color: gray;
-  margin-top: 16px;
-}
-
-.nameRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.editBtn {
+  margin-left: 8px;
 }
 
 .bioEditWrapper {
@@ -193,8 +81,10 @@
   min-height: 80px;
   font-family: inherit;
   font-size: 15px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   transition: border-color 0.2s ease;
-  padding: 4px 4px;
 
   &:focus {
     border-color: var(--primary);
@@ -205,4 +95,10 @@
 .bioEditActions {
   display: flex;
   gap: 8px;
+}
+
+.noPosts {
+  text-align: center;
+  color: gray;
+  margin-top: 16px;
 }

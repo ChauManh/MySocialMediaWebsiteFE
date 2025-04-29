@@ -11,7 +11,7 @@ const createPost = async (postData) => {
 
 const getPosts = async (userId) => {
   try {
-    const result = await axiosInstance.get(`post/${userId}`);
+    const result = await axiosInstance.get(`post/posts/${userId}`);
     return result.data;
   } catch (error) {
     return error.response.data;
@@ -45,4 +45,32 @@ const deletePost = async (postId) => {
   }
 };
 
-export { createPost, getPosts, getPostsToDisplay, likePost, deletePost };
+const commentPost = async (postId, textComment) => {
+  try {
+    const result = await axiosInstance.patch(`post/${postId}/comment`, {
+      textComment, // gửi vào body
+    });
+    return result.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+const getDetailPost = async (postId) => {
+  try {
+    const result = await axiosInstance.get(`post/${postId}`);
+    return result.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export {
+  createPost,
+  getPosts,
+  getPostsToDisplay,
+  likePost,
+  deletePost,
+  commentPost,
+  getDetailPost,
+};

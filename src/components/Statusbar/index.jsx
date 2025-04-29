@@ -17,7 +17,7 @@ function Statusbar({ onPostSuccess }) {
   const { setIsLoading } = useLoading();
   const [content, setContent] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState([]);
 
   const handleAddPost = () => {
     setShowPopup(true);
@@ -26,10 +26,10 @@ function Statusbar({ onPostSuccess }) {
   const handleClosePopup = () => {
     setShowPopup(false);
     setContent("");
-    setImageFiles(null);
+    setImageFiles([]);
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
+      setPreviewUrl([]);
     }
   };
 

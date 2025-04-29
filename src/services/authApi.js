@@ -29,6 +29,7 @@ const loginApi = async (email, password) => {
 
 const refreshToken = async () => {
   const refresh_token = localStorage.getItem("refresh_token");
+  if (!refresh_token) return;
   try {
     const res = await axiosInstance.post("auth/refresh_token", {
       refresh_token,

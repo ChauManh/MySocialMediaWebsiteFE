@@ -23,20 +23,28 @@ function ProfileBioAndPost() {
 
   const fetchPosts = async () => {
     const userPost = await getPosts(userId);
-    if (userPost.EC !== 0) {
-      toast.error(userPost.EM);
-      return;
-    }
-    setUserPosts(userPost.result);
+    if (userPost.EC === 0) {
+      setUserPosts(userPost.result);
+    } else toast.error(userPost.EM);
   };
 
   useEffect(() => {
-    const fetchAllProfile = async () => {
-      const userInfo = await getUserInfo(userId);
-      await fetchPosts();
-      setUserProfile(userInfo.result);
+    const fetchData = async () => {
+      const [userInfo, userPost] = await Promise.all([
+        getUserInfo(userId),
+        getPosts(userId),
+      ]);
+
+      if (userInfo.EC === 0) {
+        setUserProfile(userInfo.result);
+      } else toast.error(userInfo.EM);
+
+      if (userPost.EC === 0) {
+        setUserPosts(userPost.result);
+      } else toast.error(userPost.EM);
     };
-    fetchAllProfile();
+
+    fetchData();
   }, [userId]);
 
   const handleEditBio = () => {
@@ -53,12 +61,8 @@ function ProfileBioAndPost() {
   };
 
   const handleSaveBio = async () => {
-    if (newBio === userProfile.about) {
-      setIsEditingBio(false);
-      return;
-    }
+    if (newBio === userProfile.about) return setIsEditingBio(false);
     const result = await updateUserAbout(newBio);
-    console.log(result);
     if (result.EC == 0) {
       toast.success(result.EM);
       setUserProfile((prev) => ({ ...prev, about: newBio }));
@@ -123,7 +127,7 @@ function ProfileBioAndPost() {
           {isCurrentUserProfile && <Statusbar onPostSuccess={fetchPosts} />}
 
           <h2>Bài viết gần đây</h2>
-          {userPosts.length > 0 ? (
+          {userPosts?.length > 0 ? (
             userPosts.map((post) => (
               <PostItem
                 key={post._id}

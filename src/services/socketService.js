@@ -20,5 +20,14 @@ export const listenFriendRequestAccepted = (callback) => {
   socket.on("friendRequestAccepted", callback);
 };
 
+export const listenLikePost = (callback) => {
+  socket.on("like_post", callback);
+};
+
+// Nghe sự kiện "friendRequestAccepted"
+export const listenCommentPost = (callback) => {
+  socket.on("comment", callback);
+};
+
 // Xuất socket ra dùng chung nếu cần
 export default socket;

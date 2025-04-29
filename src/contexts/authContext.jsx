@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (!token) {
+        setIsLoading(false);
         return;
       } else {
         setIsLoading(true);
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         setUser,
+        token,
       }}
     >
       {children}

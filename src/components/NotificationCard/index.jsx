@@ -16,7 +16,15 @@ const NotificationCard = ({ notification }) => {
     const res = await readNotification(notification._id);
     if (res.EC === 0) {
       setIsRead(true);
-      navigate(`/profile/${notification.senderId._id}`);
+      if (
+        notification.type === "friend_request" ||
+        notification.type === "accept_friend"
+      )
+        navigate(`/profile/${notification.senderId._id}`);
+      else if (
+        notification.type === "like_post" ||
+        notification.type === "comment"
+      );
     }
   };
 

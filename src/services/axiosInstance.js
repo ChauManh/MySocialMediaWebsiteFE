@@ -24,7 +24,8 @@ axiosInstance.interceptors.response.use(
       const res = await refreshToken();
       if (res.EC === 0) {
         localStorage.setItem("access_token", res.result.access_token);
-        error.config.headers["Authorization"] = `Bearer ${res.access_token}`;
+        error.config.headers["Authorization"] =
+          `Bearer ${res.result.access_token}`;
         return axiosInstance(error.config); // Thực hiện lại request với token mới
       }
     }

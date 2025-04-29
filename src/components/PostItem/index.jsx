@@ -7,27 +7,40 @@ import formatDate from "../../utils/formatDate";
 import images from "../../assets/images";
 import Button from "../Button";
 import { useAuth } from "../../contexts/authContext";
-import { deletePost, likePost } from "../../services/postApi";
+import { commentPost, deletePost, likePost } from "../../services/postApi";
 import toast from "react-hot-toast";
-
+import { Link, useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
-function PostItem({ postData, onDelete }) {
+
+function PostItem({ postData, onDelete, showAllComments }) {
   const { user } = useAuth();
-  const [isLiked, setLike] = useState(postData?.likes?.includes(user._id));
+  const navigate = useNavigate();
+  const [isLiked, setLike] = useState(postData?.likes?.includes(user?._id));
   const [isSaved, setSave] = useState(false);
   const [likeCount, setLikeCount] = useState(postData?.likes?.length);
   const [showDeleteOption, setShowDeleteOption] = useState(false);
+  const [comments, setComments] = useState(postData.comments || []);
   const [commentCount, setCommentCount] = useState(postData?.comments?.length);
+  const [textComment, setTextComment] = useState("");
+  const commentInputRef = useRef(null);
 
-  const handleLike = async () => {
-    const res = await likePost(postData._id);
+  const handleSubmitComment = async () => {
+    if (!textComment.trim()) return;
+
+    const res = await commentPost(postData._id, textComment);
     if (res.EC === 0) {
-      setLikeCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1));
-      setLike(!isLiked);
-    } else toast.error(res.EM);
+      const newComment = res.result;
+      setComments((prev) => [newComment, ...prev]); // cập nhật lại danh sách bình luận
+      setTextComment("");
+      setCommentCount((prev) => prev + 1);
+      toast.success(res.EM);
+    } else {
+      toast.error(res.EM);
+    }
   };
 
-  const moreOptionsRef = useRef(null); // ref vùng chứa
+  const moreOptionsRef = useRef(null);
+
   const handleClickOutside = (event) => {
     if (
       moreOptionsRef.current &&
@@ -36,13 +49,19 @@ function PostItem({ postData, onDelete }) {
       setShowDeleteOption(false);
     }
   };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleLike = async () => {
+    const res = await likePost(postData._id);
+    if (res.EC === 0) {
+      setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+      setLike(!isLiked);
+    } else toast.error(res.EM);
+  };
 
   const handleDeletePost = async () => {
     const res = await deletePost(postData._id);
@@ -60,11 +79,20 @@ function PostItem({ postData, onDelete }) {
     <div className={cx("wrapper")}>
       <div className={cx("topBar")}>
         <div className={cx("infoWrapper")}>
-          <Avatar image={postData?.authorId?.profilePicture || images.avatar} />
+          <Avatar
+            image={
+              user?._id === postData?.authorId?._id
+                ? user.profilePicture || images.avatar
+                : postData?.authorId?.profilePicture || images.avatar
+            }
+          />
           <div className={cx("info")}>
-            <a href="/home" className={cx("name")}>
+            <Link
+              to={`/profile/${postData?.authorId?._id}`}
+              className={cx("name")}
+            >
               {postData?.authorId?.fullname}
-            </a>
+            </Link>
             <span className={cx("createdAt")}>
               {formatDate(postData?.createdAt)}
             </span>
@@ -89,20 +117,21 @@ function PostItem({ postData, onDelete }) {
           )}
         </div>
       </div>
+
       <div className={cx("content")}>
         <p className={cx("description")}>{postData?.content}</p>
         {postData?.images?.length > 0 && (
           <div
             className={cx(
               "media",
-              postData?.images?.length === 1
+              postData.images.length === 1
                 ? "single"
-                : postData?.images?.length === 2
+                : postData.images.length === 2
                   ? "double"
                   : "multiple"
             )}
           >
-            {postData?.images.map((item, index) =>
+            {postData.images.map((item, index) =>
               item.type === "video" ? (
                 <video
                   key={`video-${index}`}
@@ -124,6 +153,7 @@ function PostItem({ postData, onDelete }) {
           </div>
         )}
       </div>
+
       <div className={cx("postStatus")}>
         <div className={cx("emoCountBar")}>
           <i className="bi bi-emoji-smile"></i>
@@ -134,6 +164,7 @@ function PostItem({ postData, onDelete }) {
           <i className="bi bi-chat-right-text-fill"></i>
         </div>
       </div>
+
       <div className={cx("actions")}>
         <button
           className={cx("likeBtn", { liked: isLiked })}
@@ -146,7 +177,16 @@ function PostItem({ postData, onDelete }) {
             Thích
           </i>
         </button>
-        <button className={cx("commentBtn")}>
+        <button
+          className={cx("commentBtn")}
+          onClick={() => {
+            commentInputRef.current?.focus();
+            commentInputRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }}
+        >
           <i className="bi bi-chat-right-dots"> Bình luận</i>
         </button>
         <button
@@ -159,29 +199,40 @@ function PostItem({ postData, onDelete }) {
           </i>
         </button>
       </div>
-      {commentCount > 1 ? (
-        <div className={cx("commentSection")}>
-          {/* Nút "Hiển thị tất cả bình luận" */}
-          <button className={cx("showCommentsBtn")}>
-            Hiển thị tất cả bình luận
-          </button>
 
-          {/* Hiển thị 1 bình luận đầu tiên */}
-          {postData?.comments.slice(0, 1).map((comment) => (
-            <CommentItem
-              key={comment._id}
-              avatar={comment.userId.profilePicture}
-              name={comment.userId.fullname}
-              createdAt={comment.createdAt} // Đảm bảo bạn đã tạo hàm formatDate
-              description={comment.content}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className={cx("commentSection")}>
+      <div className={cx("commentSection")}>
+        {comments.length > 0 ? (
+          <>
+            {commentCount > 1 && !showAllComments && (
+              <button
+                className={cx("showCommentsBtn")}
+                onClick={() => navigate(`/post/${postData._id}`)}
+              >
+                Hiển thị tất cả bình luận
+              </button>
+            )}
+            {(showAllComments ? comments : comments.slice(0, 1)).map(
+              (comment) => (
+                <CommentItem key={comment._id} comment={comment} />
+              )
+            )}
+          </>
+        ) : (
           <div className={cx("noComments")}>Chưa có bình luận nào.</div>
+        )}
+        <div className={cx("commentInputWrapper")}>
+          <input
+            ref={commentInputRef}
+            type="text"
+            placeholder="Viết bình luận..."
+            value={textComment}
+            onChange={(e) => setTextComment(e.target.value)}
+          />
+          <Button onClick={handleSubmitComment} primary>
+            Bình luận
+          </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 }

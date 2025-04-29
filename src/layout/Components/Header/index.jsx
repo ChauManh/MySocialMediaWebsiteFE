@@ -2,7 +2,8 @@ import classNames from "classnames/bind";
 import styles from "./Header.module.scss";
 import Button from "../../../components/Button";
 import images from "../../../../src/assets/images";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "tippy.js/themes/light.css";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Avatar from "../../../components/Avatar";
@@ -14,7 +15,7 @@ const cx = classNames.bind(styles);
 
 function Header() {
   const { user, setUser } = useAuth();
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -59,7 +60,12 @@ function Header() {
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
             placeholder="Tìm bạn bè hoặc bài viết..."
           />
         </div>
@@ -97,6 +103,7 @@ function Header() {
             placement="bottom"
             interactive={true}
             trigger="mouseenter focus click"
+            theme="light"
           >
             <div>
               <Avatar image={user?.profilePicture || images.avatar} pdl />

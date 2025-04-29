@@ -1,3 +1,21 @@
+@use "sass:map";
+
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+@mixin respond-to($size) {
+  @if map.has-key($breakpoints, $size) {
+    @media (min-width: map.get($breakpoints, $size)) {
+      @content;
+    }
+  }
+}
+
+// ========== HEADER ==========
 .wrapper {
   --search-border-radius: 92px;
   --search-height: 46px;
@@ -12,66 +30,81 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 5;
+  z-index: 10;
   background-color: white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.notification-wrapper {
-  position: relative;
 }
 
 .inner {
   height: 100%;
   width: 100%;
-  // max-width: 1200px;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
+
+  @include respond-to(md) {
+    padding: 0 20px;
+  }
 }
 
 .menu {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+
+  @include respond-to(md) {
+    gap: 12px;
+  }
 }
 
 .logo img {
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   object-fit: cover;
+
+  @include respond-to(md) {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 .webName {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--primary);
   display: none;
 
-  @media screen and (min-width: 768px) {
+  @include respond-to(md) {
+    font-size: 1.4rem;
     display: block;
   }
 }
 
+// ========== SEARCH BAR ==========
 .search-bar {
   flex: 1;
-  max-width: 320px;
-  margin: 0 12px;
+  max-width: 280px;
+  margin: 0 8px;
   display: flex;
   align-items: center;
   background-color: rgba(22, 24, 35, 0.06);
   border-radius: var(--search-border-radius);
-  padding-left: 16px;
+  padding-left: 12px;
   height: var(--search-height);
   border: 1.5px solid transparent;
 
   input {
     flex: 1;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     background: transparent;
     border: none;
     outline: none;
+
+    @include respond-to(md) {
+      font-size: 1.4rem;
+    }
   }
 
   &:hover,
@@ -81,61 +114,67 @@
 
   .search-btn {
     background: transparent;
-    padding-right: 12px;
+    padding-right: 10px;
     color: rgba(22, 24, 35, 0.75);
     cursor: pointer;
+    font-size: 1.6rem;
   }
 }
 
+// ========== AVATAR ==========
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
+
+  @include respond-to(md) {
+    width: 40px;
+    height: 40px;
+  }
 }
 
+// ========== USER MENU ==========
 .user-menu {
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 10px;
-  // background-color: var(--primary);
-  border: none;
 }
 
 .menu-item {
-  // background-color: var(--primary);
-  border: 0.5px solid;
-  cursor: pointer;
+  border: 1px solid var(--primary);
   font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 6px;
   text-align: left;
-  padding: 5px 10px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  // color: #ffff;
+  cursor: pointer;
+  transition: background-color 0.25s;
 
   &:hover {
-    background-color: #0000;
-    color: #ffff;
+    background-color: var(--primary);
+    color: var(--white);
   }
 }
 
-// Responsive for smaller screens
+// ========== NOTIFICATION ==========
+.notification-wrapper {
+  position: relative;
+}
+
+// ========== RESPONSIVE MOBILE ==========
 @media screen and (max-width: 768px) {
   .search-bar {
-    // display: none;
+    margin: 0 4px;
+    max-width: 220px;
+  }
+
+  .menu {
+    gap: 6px;
   }
 
   .webName {
     display: none;
-  }
-
-  .inner {
-    padding: 0 8px;
-  }
-
-  .menu {
-    gap: 8px;
   }
 }

@@ -13,32 +13,33 @@
 
   max-height: calc(5 * 80px + 50px);
   overflow-y: auto;
-
-  /* Scroll mượt */
   scroll-behavior: smooth;
 
-  /* Ẩn scrollbar mặc định */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-}
-.notification-bar::-webkit-scrollbar {
-  width: 0px; /* Chrome, Safari */
-}
-
-/* Khi hover vào notification-bar thì hiện scrollbar */
-.notification-bar:hover {
+  // Firefox
   scrollbar-width: thin;
-}
-.notification-bar:hover::-webkit-scrollbar {
-  width: 6px;
-}
+  scrollbar-color: transparent transparent;
 
-.notification-bar:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-}
-.notification-bar:hover::-webkit-scrollbar-track {
-  background: transparent;
+  &:hover {
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  }
+
+  // Chrome, Safari
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 8px;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 .notification-header {

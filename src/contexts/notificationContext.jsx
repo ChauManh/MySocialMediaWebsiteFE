@@ -1,32 +1,19 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import {
+import { createContext, useContext, useEffect } from "react";
+import socket, {
   listenFriendRequestAccepted,
   listenNewFriendRequest,
+  listenLikePost,
+  listenCommentPost,
 } from "../services/socketService";
-import { getNotifications } from "../services/notificationApi";
 import toast from "react-hot-toast";
 
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const [notifications, setNotifications] = useState([]);
-
-  // Load notifications lúc mới vào app
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const res = await getNotifications();
-      if (res.EC === 0) {
-        setNotifications(res.result);
-      }
-    };
-    fetchNotifications();
-  }, []);
-
   // Nghe socket
   useEffect(() => {
     const handleNewFriendRequest = (data) => {
-      setNotifications((prev) => [data, ...prev]);
-      toast.success(data.message || "Bạn có lời mời kết bạn mới!", {
+      toast.success(data.message, {
         duration: 4000,
         position: "top-right",
       });
@@ -42,15 +29,34 @@ export const NotificationProvider = ({ children }) => {
       );
     };
 
+    const handleLikePost = (data) => {
+      toast.success(data.message, {
+        duration: 4000,
+        position: "top-right",
+      });
+    };
+
+    const handleCommentPost = (data) => {
+      toast.success(data.message, {
+        duration: 4000,
+        position: "top-right",
+      });
+    };
+
     listenNewFriendRequest(handleNewFriendRequest);
     listenFriendRequestAccepted(handleFriendRequestAccepted);
+    listenLikePost(handleLikePost);
+    listenCommentPost(handleCommentPost);
     return () => {
-      //   socket.off("newFriendRequest"); // Nếu service chưa off thì mình cần tự off (mình sẽ gợi ý sau)
+      socket.off("newFriendRequest", handleNewFriendRequest);
+      socket.off("friendRequestAccepted", handleFriendRequestAccepted);
+      socket.off("like_post", handleLikePost);
+      socket.off("comment", handleCommentPost);
     };
   }, []);
 
   return (
-    <NotificationContext.Provider value={{ notifications, setNotifications }}>
+    <NotificationContext.Provider value={{}}>
       {children}
     </NotificationContext.Provider>
   );

@@ -1,0 +1,25 @@
+// PostDetail.module.scss
+.wrapper {
+  width: 100%;
+  @media (max-width: 768px) {
+    padding: 16px 8px;
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: center;
+    color: var(--primary);
+  }
+}
+
+.postContainer {
+  width: 80%;
+  padding: 0 16px 48px;
+
+  @media screen and (max-width: 768px) {
+    width: 100%; // Full chiều ngang
+    padding: 0 12px 48px; // Padding nhỏ lại
+  }
+}

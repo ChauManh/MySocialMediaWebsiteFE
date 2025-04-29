@@ -3,17 +3,24 @@ import styles from "./SignUp.module.scss";
 import images from "../../assets/images";
 import Input from "../../components/InputItem";
 import Button from "../../components/Button";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 // import axios from 'axios';
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createApi } from "../../services/authApi";
+import { useAuth } from "../../contexts/authContext";
 
 const cx = classNames.bind(styles);
 
 function SignUp() {
   const navigate = useNavigate();
+  const { token } = useAuth();
+  useEffect(() => {
+    if (token) {
+      navigate("/home");
+    }
+  }, [token, navigate]);
+
 
   const [form, setForm] = useState({
     fullname: "",
@@ -55,11 +62,7 @@ function SignUp() {
     }
 
     try {
-      const result = await createApi(
-        form.fullname,
-        form.email,
-        form.password
-      );
+      const result = await createApi(form.fullname, form.email, form.password);
 
       navigate("/");
       toast.success(result.EM, {

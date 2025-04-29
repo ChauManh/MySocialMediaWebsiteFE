@@ -2,16 +2,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .container {
   display: flex;
   width: 100%;
+  min-height: 100vh;
+  padding-top: var(--default-layout-header-height);
 }
 
 .content {
   flex: 1;
   overflow-y: auto;
-  margin-left: 25%;
-  margin-top: var(--default-layout-header-height);
+  padding: 20px;
+  margin-left: 240px; // Sidebar default 240px
+
+  @media screen and (max-width: 768px) {
+    margin-left: 0; // Mobile không có sidebar
+    padding: 12px;
+  }
 }

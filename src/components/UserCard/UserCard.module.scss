@@ -4,14 +4,19 @@
   justify-content: space-between;
   gap: 12px;
   padding: 12px;
-  // margin: 12px;
   border: 1px solid var(--primary);
   border-radius: 16px;
-  // transition: background 0.2s ease;
-  width: 40%;
+  background-color: #fff;
+  width: 100%;
+  max-width: 480px;
 
   &:hover {
     background: #f9f9f9;
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px;
+    gap: 8px;
   }
 }
 
@@ -19,8 +24,10 @@
   flex: 1;
 
   h4 {
-    font-size: 20px;
-    margin-bottom: 2px;
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.2;
+
     &:hover {
       color: var(--primary);
       cursor: pointer;
@@ -31,19 +38,24 @@
   p {
     font-size: 12px;
     margin: 0;
-  }
-
-  .friendCount {
-    font-size: 12px;
+    color: #666;
   }
 }
 
+.friendCount,
 .mutual {
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 0.75rem;
+  line-height: 1.2;
 }
 
-.friendCount {
-  font-size: 0.85rem;
-  color: #666;
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    flex-shrink: 0;
+    gap: 6px;
+  }
 }

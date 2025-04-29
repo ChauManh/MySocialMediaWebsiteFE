@@ -1,27 +1,44 @@
 .wrapper {
-  margin-top: 4px;
-  margin-bottom: 12px;
+  margin: 8px 0;
   border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
 }
 
 .info {
   display: flex;
+  gap: 8px; // tạo khoảng cách giữa avatar và comment
 }
 
 .comment {
   display: flex;
   flex-direction: column;
+  background-color: #f9f9f9;
   border: 0.5px solid var(--primary);
   border-radius: 8px;
-  padding: 6px;
+  padding: 4px 8px;
+  max-width: 100%;
+  word-break: break-word;
+  font-size: 1.4rem;
 }
 
 .name {
   font-weight: bold;
   cursor: pointer;
+
+  &:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+}
+
+.description {
+  font-size: 1.6rem;
 }
 
 .createdAt {
-  font-weight: 100;
   font-size: 1.2rem;
+  color: #888;
+  font-style: italic;
+  // align-self: flex-end;
 }

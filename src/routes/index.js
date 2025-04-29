@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Search from "../pages/Search";
+import PostDetail from "../pages/PostDetail";
 
 const publicRoute = [
   { path: "/", component: SignIn, Layout: null },
@@ -14,9 +15,18 @@ const publicRoute = [
 
 const privateRoute = [
   { path: "/home", component: Home },
-  { path: "/profile/:userId", component: ProfileBioAndPost, Layout: ProfileLayout },
-  { path: "/profile/:userId/friends", component: ProfileFriendList, Layout: ProfileLayout },
+  {
+    path: "/profile/:userId",
+    component: ProfileBioAndPost,
+    Layout: ProfileLayout,
+  },
+  {
+    path: "/profile/:userId/friends",
+    component: ProfileFriendList,
+    Layout: ProfileLayout,
+  },
   { path: "/search", component: Search, Layout: YHeaderNSidebarLayout },
+  { path: "/post/:id", component: PostDetail },
 ];
 
 export { publicRoute, privateRoute };

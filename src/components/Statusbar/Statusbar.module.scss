@@ -1,7 +1,7 @@
 .statusBar {
-  margin-top: 16px;
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: 16px;
   width: 80%;
   justify-content: center;
   height: 120px;
@@ -17,6 +17,10 @@
   display: flex;
   height: 50%;
   align-items: center;
+}
+
+.itemText {
+  padding-left: 12px;
 }
 
 .actions {
@@ -71,15 +75,15 @@
 .imagePreviewWrapper {
   margin-top: 12px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); // Hiển thị 2 cột
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   max-width: 100%;
   max-height: 400px;
+}
 
-  img {
-    width: 100%; // chiếm toàn bộ ô
-    height: 150px;
-    border-radius: 10px;
-    object-fit: cover;
-  }
+.imagePreview {
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
 }
