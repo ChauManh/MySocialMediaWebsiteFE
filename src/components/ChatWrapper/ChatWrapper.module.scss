@@ -1,0 +1,22 @@
+.chatBoxWrapper {
+  position: fixed;
+  bottom: 20px;
+  z-index: 1000;
+}
+
+.pos-0 {
+  right: 550px;
+}
+
+.pos-1 {
+  right: 860px;
+}
+
+@media (max-width: 768px) {
+  .pos-0 {
+    right: 300px;
+  }
+  .pos-1 {
+    display: none;
+  }
+}

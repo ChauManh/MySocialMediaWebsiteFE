@@ -1,15 +1,23 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { publicRoute, privateRoute } from './routes';
-import DefaultLayout from './layout/DefaultLayout/index';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Fragment } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { publicRoute, privateRoute } from "./routes";
+import DefaultLayout from "./layout/DefaultLayout";
+import ChatWrapper from "./components/ChatWrapper";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { Fragment } from "react";
 
 function App() {
   const isAuthenticated = () => {
-    if (localStorage.getItem('access_token')) return true;
-    return false;
+    return !!localStorage.getItem("access_token");
   };
+
+  const isLoggedIn = isAuthenticated();
+
   return (
     <Router>
       <div className="App">
@@ -52,7 +60,7 @@ function App() {
                 key={index}
                 path={route.path}
                 element={
-                  isAuthenticated() ? (
+                  isLoggedIn ? (
                     <Layout>
                       <Page />
                     </Layout>
@@ -64,6 +72,8 @@ function App() {
             );
           })}
         </Routes>
+
+        {isLoggedIn && <ChatWrapper />}
       </div>
     </Router>
   );

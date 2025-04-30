@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from "./Sidebar.module.scss";
-import MenuItem from "../../../components/SidebarItem";
+import SidebarItem from "../../../components/SidebarItem";
 import { useAuth } from "../../../contexts/authContext";
 import { useState } from "react";
 import images from "../../../assets/images";
@@ -23,19 +23,19 @@ function Sidebar() {
         )}
       </button>
 
-      <MenuItem
+      <SidebarItem
         to={`/profile/${user?._id}`}
         image={user?.profilePicture || images.avatar}
         label={user?.fullname}
         collapsed={isCollapsed}
       />
-      <MenuItem
+      <SidebarItem
         to={`/profile/${user?._id}/friends`}
         icon="bi bi-people"
         label="Bạn bè"
         collapsed={isCollapsed}
       />
-      <MenuItem
+      <SidebarItem
         to={`/profile/${user?._id}`}
         icon="bi bi-file-earmark-text"
         label="Bài viết của tôi"

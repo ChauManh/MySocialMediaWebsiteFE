@@ -16,10 +16,12 @@
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  margin-left: 240px; // Sidebar default 240px
+  margin-left: 280px; // Sidebar trái
+  margin-right: 250px; // Sidebar phải (FriendSidebar)
 
   @media screen and (max-width: 768px) {
-    margin-left: 0; // Mobile không có sidebar
+    margin-left: 0;
+    margin-right: 0;
     padding: 12px;
   }
 }

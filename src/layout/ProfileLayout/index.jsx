@@ -44,6 +44,8 @@ function ProfileLayout({ children }) {
   useEffect(() => {
     const fetchUserInfo = async () => {
       setIsLoading(true);
+      setShowAvatarOptions(false);
+      setShowBackgroundOptions(false);
       const userInfo = await getUserInfo(userId);
       if (userInfo.EC === 0) {
         setIsFriend(userInfo.result.friends.includes(user?._id));
@@ -60,8 +62,7 @@ function ProfileLayout({ children }) {
       setIsLoading(false);
     };
     fetchUserInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, user?._id]);
+  }, [userId, user?._id, setIsLoading]);
 
   const handleOpenFileDialog = () => {
     if (fileInputRef.current) {

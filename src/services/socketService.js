@@ -29,5 +29,9 @@ export const listenCommentPost = (callback) => {
   socket.on("comment", callback);
 };
 
+export const listenNewMessage = (callback) => {
+  socket.on("newMessage", callback);
+};
+
 // Xuất socket ra dùng chung nếu cần
 export default socket;

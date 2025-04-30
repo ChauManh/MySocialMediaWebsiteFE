@@ -120,7 +120,12 @@ function UserCard({ userData }) {
             <Button small primary onClick={() => handleFriendAction("accept")}>
               Chấp nhận
             </Button>
-            <Button small outline onClick={() => handleFriendAction("deny")}>
+            <Button
+              small
+              outline
+              onClick={() => handleFriendAction("deny")}
+              className="btn-no-margin-left"
+            >
               Từ chối
             </Button>
           </>

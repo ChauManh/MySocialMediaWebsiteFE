@@ -1,0 +1,33 @@
+.sidebar {
+  position: fixed;
+  top: var(--default-layout-header-height, 60px); // ngay dưới header
+  right: 0;
+  width: 250px;
+  height: calc(100vh - var(--default-layout-header-height, 60px));
+  border-left: 1px solid #ddd;
+  padding: 16px;
+  background-color: #fff;
+  box-sizing: border-box;
+  overflow-y: auto;
+  z-index: 9;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty {
+  font-size: 14px;
+  color: #888;
+}
