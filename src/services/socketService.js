@@ -1,7 +1,8 @@
 import { io } from "socket.io-client";
+const SOCKET_URL = import.meta.env.VITE_API_URL;
 
 // Khởi tạo socket client
-const socket = io("http://3.106.56.152:5000", {
+const socket = io(SOCKET_URL, {
   transports: ["websocket"], // Ưu tiên websocket, tránh bị downgrade xuống polling
 });
 
