@@ -21,10 +21,7 @@ const NotificationCard = ({ notification }) => {
         notification.type === "accept_friend"
       )
         navigate(`/profile/${notification.senderId._id}`);
-      else if (
-        notification.type === "like_post" ||
-        notification.type === "comment"
-      );
+      else navigate(`/post/${notification.postId}`);
     }
   };
 

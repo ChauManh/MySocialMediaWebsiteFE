@@ -22,7 +22,12 @@ function PostItem({ postData, onDelete, showAllComments }) {
   const [comments, setComments] = useState(postData.comments || []);
   const [commentCount, setCommentCount] = useState(postData?.comments?.length);
   const [textComment, setTextComment] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
   const commentInputRef = useRef(null);
+
+  const handleImageClick = (url) => {
+    setSelectedImage(url);
+  };
 
   const handleSubmitComment = async () => {
     if (!textComment.trim()) return;
@@ -147,6 +152,7 @@ function PostItem({ postData, onDelete, showAllComments }) {
                   src={item}
                   alt={`media-${index}`}
                   className={cx("mediaItem")}
+                  onClick={() => handleImageClick(item)}
                 />
               )
             )}
@@ -228,11 +234,21 @@ function PostItem({ postData, onDelete, showAllComments }) {
             value={textComment}
             onChange={(e) => setTextComment(e.target.value)}
           />
-          <Button onClick={handleSubmitComment} primary>
-            Bình luận
+          <Button onClick={handleSubmitComment} primary circle outline>
+            <i className="bi bi-send"></i>
           </Button>
         </div>
       </div>
+      {selectedImage && (
+        <div className={cx("modal")} onClick={() => setSelectedImage(null)}>
+          <div
+            className={cx("modalContent")}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img src={selectedImage} alt="preview" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

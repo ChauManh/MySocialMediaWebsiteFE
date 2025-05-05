@@ -4,7 +4,7 @@
   width: 100%;
   margin: 16px auto 0;
   overflow: hidden;
-  max-width: 800px; /* Desktop sẽ giới hạn max-width */
+  max-width: 680px; /* Desktop sẽ giới hạn max-width */
 
   @media screen and (max-width: 768px) {
     max-width: 100%; /* Mobile chiếm gần hết chiều rộng */
@@ -19,7 +19,6 @@
   gap: 8px;
   padding: 12px;
   border-top: 1px solid #e0e0e0;
-  background-color: #fefefe;
 
   .avatar {
     width: 36px;
@@ -46,18 +45,6 @@
       outline: none;
     }
   }
-
-  button {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
 }
 
 .topBar {
@@ -74,8 +61,8 @@
 .info {
   display: flex;
   flex-direction: column;
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 1.8rem;
+  font-weight: 500;
   padding-left: 12px;
 }
 
@@ -138,6 +125,7 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
 .postStatus {
@@ -220,4 +208,30 @@
 
 .noComments {
   font-size: 16px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+
+  .modalContent {
+    max-width: 90%;
+    max-height: 90%;
+    cursor: default;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+  }
 }

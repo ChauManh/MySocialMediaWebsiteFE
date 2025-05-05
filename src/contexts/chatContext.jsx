@@ -12,7 +12,10 @@ export const ChatProvider = ({ children }) => {
     const res = await getMessageByConversationId(conversationId);
     const messages = res.EC === 0 ? res.result : [];
 
-    setOpenChats((prev) => [...prev, { ...friend, conversationId, messages }]);
+    setOpenChats((prev) => [
+      ...(prev.length > 1 ? prev.slice(1) : prev),
+      { ...friend, conversationId, messages },
+    ]);
   };
 
   const closeChatWith = (friendId) => {

@@ -42,14 +42,14 @@ function ChatBox({ friend, onClose }) {
         <Avatar image={friend?.profilePicture || images.avatar} smallSize />
         <span className={cx("name")}>{friend?.fullname}</span>
         <button className={cx("closeBtn")} onClick={onClose}>
-          ×
+          <i class="bi bi-x-lg"></i>
         </button>
       </div>
 
       <div className={cx("messages")}>
-        {messages.map((msg, index) => {
+        {messages?.map((msg, index) => {
           const isMe =
-            msg.senderId === user._id || msg.senderId?._id === user._id;
+            msg.senderId === user?._id || msg.senderId._id === user?._id;
 
           return (
             <div
@@ -76,8 +76,8 @@ function ChatBox({ friend, onClose }) {
             if (e.key === "Enter") handleSend();
           }}
         />
-        <Button primary onClick={handleSend}>
-          Gửi
+        <Button primary onClick={handleSend} circle outline>
+          <i className="bi bi-send"></i>
         </Button>
       </div>
     </div>
