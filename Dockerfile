@@ -1,25 +1,29 @@
-# Bước 1: Sử dụng Node.js để build ứng dụng
+# Bước 1: Build ứng dụng bằng Node.js
 FROM node:18-alpine AS build
 
-# Cài đặt thư viện
 WORKDIR /app
+
+# Cài đặt thư viện
 COPY package*.json ./
 RUN npm install
 
-# Copy mã nguồn
+# Copy toàn bộ source code vào container
 COPY . .
 
-# Build ứng dụng với Vite
+# Build production
 RUN npm run build
 
-# Bước 2: Sử dụng Nginx để serve ứng dụng
+# Bước 2: Dùng Nginx để serve build
 FROM nginx:alpine
 
-# Copy build từ bước trước vào thư mục được phục vụ bởi Nginx
+# Copy file config tùy chỉnh nếu có
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy build vào thư mục public của Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose cổng 80 để có thể truy cập ứng dụng từ bên ngoài
+# Expose cổng 80
 EXPOSE 80
 
-# Khởi động Nginx
+# Chạy nginx
 CMD ["nginx", "-g", "daemon off;"]

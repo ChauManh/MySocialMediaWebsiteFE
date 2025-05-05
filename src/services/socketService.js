@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 
 // Khởi tạo socket client
-const socket = io("http://localhost:5000", {
+const socket = io("http://3.106.56.152:5000", {
   transports: ["websocket"], // Ưu tiên websocket, tránh bị downgrade xuống polling
 });
 
