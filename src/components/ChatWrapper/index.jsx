@@ -4,12 +4,19 @@ import classNames from "classnames/bind";
 import styles from "./ChatWrapper.module.scss";
 import socket, { listenNewMessage } from "../../services/socketService";
 import { useEffect } from "react";
+import { useAuth } from "../../contexts/authContext";
 
 const cx = classNames.bind(styles);
 
 function ChatWrapper() {
-  const { openChats, closeChatWith, openChatWith, updateChatMessages } =
-    useChat();
+  const {
+    openChats,
+    closeChatWith,
+    openChatWith,
+    updateChatMessages,
+    updateConversationsLastMessage,
+  } = useChat();
+  const { user, token } = useAuth();
   useEffect(() => {
     const handleNewMessage = (data) => {
       const { message, conversationId, sender } = data;
@@ -20,6 +27,7 @@ function ChatWrapper() {
       }
 
       updateChatMessages(conversationId, message);
+      updateConversationsLastMessage(conversationId, message);
     };
 
     listenNewMessage(handleNewMessage);
@@ -31,11 +39,19 @@ function ChatWrapper() {
 
   return (
     <>
-      {openChats.map((friend, index) => (
-        <div key={friend._id} className={cx("chatBoxWrapper", `pos-${index}`)}>
-          <ChatBox friend={friend} onClose={() => closeChatWith(friend._id)} />
-        </div>
-      ))}
+      {token &&
+        user &&
+        openChats.map((friend, index) => (
+          <div
+            key={friend._id}
+            className={cx("chatBoxWrapper", `pos-${index}`)}
+          >
+            <ChatBox
+              friend={friend}
+              onClose={() => closeChatWith(friend._id)}
+            />
+          </div>
+        ))}
     </>
   );
 }

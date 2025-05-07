@@ -36,7 +36,7 @@ function SignIn() {
 
     // validate
     if (!form.email || !form.password) {
-      toast.error("All fields are required", {
+      toast.error("Yêu cầu nhập đầy đủ thông tin", {
         duration: 2000,
         position: "top-right",
       });
@@ -69,11 +69,11 @@ function SignIn() {
     <div className={cx("wrapper")}>
       <div className={cx("webDescription")}>
         <img src={images.logo} alt="Logo" className={cx("logo")} />
-        <span className={cx("slogan")}>THIS IS MY FIRST FULLSTACK PROJECT</span>
+        <span className={cx("slogan")}>ZingMe</span>
       </div>
       <form onSubmit={handleSignIn} className={cx("formWrapper")}>
         <div className={cx("infoWrapper")}>
-          <h2 className={cx("title")}>Sign in</h2>
+          <h2 className={cx("title")}>Đăng nhập</h2>
           <Input
             type="email"
             name="email"
@@ -83,20 +83,20 @@ function SignIn() {
           <Input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             onChange={onUpdateField}
             autocomplete="current-password"
           />
           <div className={cx("actions")}>
             <Button type="submit" primary className={cx("signInBtn")}>
-              Sign in
+              Đăng nhập
             </Button>
             {/* <Link to="/signup"> */}
-            <span className={cx("forgottenPassword")}>Forgotten password?</span>
+            <span className={cx("forgottenPassword")}>Quên mật khẩu?</span>
             {/* </Link> */}
             <Link to="/signup">
               <Button outline className={cx("signUpBtn")}>
-                Create new account
+                Tạo tài khoản
               </Button>
             </Link>
           </div>

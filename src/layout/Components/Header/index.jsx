@@ -10,6 +10,7 @@ import Avatar from "../../../components/Avatar";
 import { useAuth } from "../../../contexts/authContext";
 import { useState } from "react";
 import NotificationBar from "../../../components/NotificationBar";
+import MessageBar from "../../../components/MessageBar";
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,7 @@ function Header() {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showConversations, setShowConversations] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -71,11 +73,19 @@ function Header() {
         </div>
 
         <div className={cx("menu")}>
-          <Tippy content="Messages" placement="bottom">
-            <Button circle className={cx("messageBtn")}>
-              <i className="bi bi-chat-left-text-fill"></i>
-            </Button>
-          </Tippy>
+          <div className={cx("message-wrapper")}>
+            <Tippy content="Messages" placement="bottom">
+              <Button
+                circle
+                onClick={() => setShowConversations(!showConversations)}
+              >
+                <i className="bi bi-chat-left-text-fill"></i>
+              </Button>
+            </Tippy>
+            {showConversations && (
+              <MessageBar setShowConversations={setShowConversations} />
+            )}
+          </div>
 
           <div className={cx("notification-wrapper")}>
             <Tippy content="Notifications" placement="bottom">

@@ -1,8 +1,9 @@
 import { io } from "socket.io-client";
-const SOCKET_URL = import.meta.env.VITE_API_URL;
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 // Khởi tạo socket client
 const socket = io(SOCKET_URL, {
+  path: "/api/socket.io",
   transports: ["websocket"], // Ưu tiên websocket, tránh bị downgrade xuống polling
 });
 

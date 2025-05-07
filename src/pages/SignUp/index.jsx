@@ -3,7 +3,7 @@ import styles from "./SignUp.module.scss";
 import images from "../../assets/images";
 import Input from "../../components/InputItem";
 import Button from "../../components/Button";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 // import axios from 'axios';
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
@@ -20,7 +20,6 @@ function SignUp() {
       navigate("/home");
     }
   }, [token, navigate]);
-
 
   const [form, setForm] = useState({
     fullname: "",
@@ -41,7 +40,7 @@ function SignUp() {
     e.preventDefault();
     // validate
     if (form.password !== form.verifyPassword) {
-      toast.error("Passwords do not match", {
+      toast.error("Mật khẩu không khớp", {
         duration: 2000,
         position: "top-right",
       });
@@ -54,24 +53,21 @@ function SignUp() {
       !form.password ||
       !form.verifyPassword
     ) {
-      toast.error("All fields are required", {
+      toast.error("Yêu cầu nhập đầy đủ thông tin", {
         duration: 2000,
         position: "top-right",
       });
       return;
     }
-
-    try {
-      const result = await createApi(form.fullname, form.email, form.password);
-
+    const result = await createApi(form.fullname, form.email, form.password);
+    if (result.EC === 0) {
       navigate("/");
       toast.success(result.EM, {
         duration: 2000,
         position: "top-right",
       });
-    } catch (err) {
-      const errorMessage = err.response?.data?.error;
-      toast.error(errorMessage, {
+    } else {
+      toast.error(result.EM, {
         duration: 2000,
         position: "top-right",
       });
@@ -82,16 +78,16 @@ function SignUp() {
     <div className={cx("wrapper")}>
       <div className={cx("webDescription")}>
         <img src={images.logo} alt="Logo" className={cx("logo")} />
-        <span className={cx("slogan")}>THIS IS MY FIRST FULLSTACK PROJECT</span>
+        <span className={cx("slogan")}>ZingMe</span>
       </div>
       <form onSubmit={handleSignUp} className={cx("formWrapper")}>
         <div className={cx("infoWrapper")}>
-          <h2 className={cx("title")}>Sign up</h2>
+          <h2 className={cx("title")}>Đăng ký</h2>
           <Input
             icon="bi bi-info-circle-fill"
             type="text"
             name="fullname"
-            placeholder="Full name"
+            placeholder="Họ và tên"
             onChange={onUpdateField}
           />
           <Input
@@ -103,25 +99,25 @@ function SignUp() {
           <Input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             onChange={onUpdateField}
           />
           <Input
             type="password"
             name="verifyPassword"
-            placeholder="Verify password"
+            placeholder="Xác nhận mật khẩu"
             onChange={onUpdateField}
           />
           <div className={cx("actions")}>
             <span className={cx("terms")}>
-              By signing up, you agree to our terms and conditions
+              Đồng ý và chấp nhận các điều khoản của ZingMe
             </span>
             <Button type="submit" primary className={cx("signUpBtn")}>
-              Sign up
+              Đăng ký
             </Button>
             <Link to="/">
               <span className={cx("alreadyHaveAccount")}>
-                Already Have an account?
+                Đã có tài khoản? Đăng nhập ngay
               </span>
             </Link>
           </div>

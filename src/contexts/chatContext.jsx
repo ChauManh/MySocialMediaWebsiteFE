@@ -1,17 +1,25 @@
 import { createContext, useContext, useState } from "react";
-import { getMessageByConversationId } from "../services/messageApi";
+import {
+  getMessageByConversationId,
+  readMessage,
+} from "../services/messageApi";
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const [openChats, setOpenChats] = useState([]);
+  const [conversations, setConversations] = useState([]);
 
   const openChatWith = async (friend, conversationId) => {
     const alreadyOpen = openChats.some((f) => f._id === friend._id);
     if (alreadyOpen) return;
-
-    const res = await getMessageByConversationId(conversationId);
-    const messages = res.EC === 0 ? res.result : [];
-
+    let messages = [];
+    if (conversationId) {
+      const res = await getMessageByConversationId(conversationId);
+      if (res.EC == 0) {
+        messages = res.result;
+        await readMessage(conversationId);
+      }
+    }
     setOpenChats((prev) => [
       ...(prev.length > 1 ? prev.slice(1) : prev),
       { ...friend, conversationId, messages },
@@ -38,9 +46,28 @@ export const ChatProvider = ({ children }) => {
     );
   };
 
+  const updateConversationsLastMessage = (conversationId, newMessage) => {
+    console.log(conversations);
+    setConversations((prev) =>
+      prev.map((c) =>
+        c._id === conversationId
+          ? { ...c, lastMessage: newMessage, updatedAt: new Date() }
+          : c
+      )
+    );
+  };
+
   return (
     <ChatContext.Provider
-      value={{ openChats, openChatWith, closeChatWith, updateChatMessages }}
+      value={{
+        openChats,
+        openChatWith,
+        closeChatWith,
+        updateChatMessages,
+        conversations,
+        setConversations,
+        updateConversationsLastMessage,
+      }}
     >
       {children}
     </ChatContext.Provider>

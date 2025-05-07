@@ -9,11 +9,12 @@ const getMessageByConversationId = async (conversationId) => {
   }
 };
 
-const sendMessage = async (conversationId, message) => {
+const sendMessage = async (conversationId, message, receiveUserId) => {
   try {
-    const result = await axiosInstance.post(`message`, {
-      conversationId,
+    const result = await axiosInstance.post("message", {
+      conversationId: conversationId || null,
       message,
+      receiveUserId: receiveUserId || null,
     });
     return result.data;
   } catch (error) {
@@ -21,4 +22,13 @@ const sendMessage = async (conversationId, message) => {
   }
 };
 
-export { getMessageByConversationId, sendMessage };
+const readMessage = async (conversationId) => {
+  try {
+    const result = await axiosInstance.patch(`message/${conversationId}`);
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
+export { getMessageByConversationId, sendMessage, readMessage };

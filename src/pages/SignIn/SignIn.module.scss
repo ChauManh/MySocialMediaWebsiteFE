@@ -35,7 +35,7 @@ $breakpoints: (
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 
   @include respond-to(md) {
     width: 50%;
@@ -44,14 +44,14 @@ $breakpoints: (
 }
 
 .logo {
-  width: 80px;
-  height: 80px;
+  width: 160px;
+  height: 160px;
   object-fit: contain;
   margin-bottom: 8px;
 
   @include respond-to(md) {
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
   }
 }
 

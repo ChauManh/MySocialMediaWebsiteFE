@@ -14,7 +14,7 @@ function ChatBox({ friend, onClose }) {
   const { user } = useAuth();
   const [message, setMessage] = useState("");
   const messages = friend.messages;
-  const { updateChatMessages } = useChat();
+  const { updateChatMessages, updateConversationsLastMessage } = useChat();
 
   const messagesEndRef = useRef();
 
@@ -28,10 +28,10 @@ function ChatBox({ friend, onClose }) {
 
   const handleSend = async () => {
     if (!message.trim()) return;
-
-    const res = await sendMessage(friend.conversationId, message);
+    const res = await sendMessage(friend.conversationId, message, friend._id);
     if (res.EC === 0) {
       updateChatMessages(friend.conversationId, res.result);
+      updateConversationsLastMessage(friend.conversationId, res.result);
       setMessage("");
     }
   };

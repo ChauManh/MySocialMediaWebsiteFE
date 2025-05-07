@@ -11,13 +11,22 @@ const createOrGetConversation = async (friendId) => {
   }
 };
 
-// const readNotification = async (id) => {
-//   try {
-//     const result = await axiosInstance.patch(`notification/${id}`);
-//     return result.data;
-//   } catch (error) {
-//     return error.response?.data;
-//   }
-// };
+const getUserConversations = async () => {
+  try {
+    const result = await axiosInstance.get("conversation");
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
 
-export { createOrGetConversation };
+const getConversationWith = async (friendId) => {
+  try {
+    const result = await axiosInstance.get(`conversation/${friendId}`);
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
+export { createOrGetConversation, getUserConversations, getConversationWith };
