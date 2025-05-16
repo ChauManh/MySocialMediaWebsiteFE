@@ -10,6 +10,7 @@ import { useAuth } from "../../contexts/authContext";
 import { commentPost, deletePost, likePost } from "../../services/postApi";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import ImageModal from "../ImageModal";
 const cx = classNames.bind(styles);
 
 function PostItem({ postData, onDelete, showAllComments }) {
@@ -22,12 +23,8 @@ function PostItem({ postData, onDelete, showAllComments }) {
   const [comments, setComments] = useState(postData.comments || []);
   const [commentCount, setCommentCount] = useState(postData?.comments?.length);
   const [textComment, setTextComment] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [modalIndex, setModalIndex] = useState(null);
   const commentInputRef = useRef(null);
-
-  const handleImageClick = (url) => {
-    setSelectedImage(url);
-  };
 
   const handleSubmitComment = async () => {
     if (!textComment.trim()) return;
@@ -125,39 +122,37 @@ function PostItem({ postData, onDelete, showAllComments }) {
 
       <div className={cx("content")}>
         <p className={cx("description")}>{postData?.content}</p>
-        {postData?.images?.length > 0 && (
-          <div
-            className={cx(
-              "media",
-              postData.images.length === 1
-                ? "single"
-                : postData.images.length === 2
-                  ? "double"
-                  : "multiple"
-            )}
-          >
-            {postData.images.map((item, index) =>
-              item.type === "video" ? (
-                <video
-                  key={`video-${index}`}
-                  controls
-                  className={cx("mediaItem")}
-                >
-                  <source src={item.url} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <img
-                  key={`image-${index}`}
-                  src={item}
-                  alt={`media-${index}`}
-                  className={cx("mediaItem")}
-                  onClick={() => handleImageClick(item)}
-                />
-              )
-            )}
-          </div>
-        )}
+        <div
+          className={cx(
+            "media",
+            postData.media.length === 1
+              ? "single"
+              : postData.media.length === 2
+                ? "double"
+                : "multiple"
+          )}
+        >
+          {postData.media.map((item, index) =>
+            item.type === "video" ? (
+              <video
+                key={index}
+                src={item.url}
+                className={cx("mediaItem")}
+                muted
+                preload="metadata"
+                onClick={() => setModalIndex(index)}
+              />
+            ) : (
+              <img
+                key={index}
+                src={item.url}
+                className={cx("mediaItem")}
+                onClick={() => setModalIndex(index)}
+                alt={`media-${index}`}
+              />
+            )
+          )}
+        </div>
       </div>
 
       <div className={cx("postStatus")}>
@@ -239,15 +234,13 @@ function PostItem({ postData, onDelete, showAllComments }) {
           </Button>
         </div>
       </div>
-      {selectedImage && (
-        <div className={cx("modal")} onClick={() => setSelectedImage(null)}>
-          <div
-            className={cx("modalContent")}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img src={selectedImage} alt="preview" />
-          </div>
-        </div>
+      {modalIndex !== null && (
+        <ImageModal
+          mediaList={postData.media}
+          currentIndex={modalIndex}
+          onClose={() => setModalIndex(null)}
+          onChangeIndex={setModalIndex}
+        />
       )}
     </div>
   );

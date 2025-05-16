@@ -69,7 +69,7 @@ function SignIn() {
     <div className={cx("wrapper")}>
       <div className={cx("webDescription")}>
         <img src={images.logo} alt="Logo" className={cx("logo")} />
-        <span className={cx("slogan")}>ZingMe</span>
+        <span className={cx("slogan")}>MT SOCIAL MEDIA</span>
       </div>
       <form onSubmit={handleSignIn} className={cx("formWrapper")}>
         <div className={cx("infoWrapper")}>

@@ -42,8 +42,7 @@ $breakpoints: (
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
-
+  padding: 0 8px;
   @include respond-to(md) {
     padding: 0 20px;
   }
@@ -52,7 +51,6 @@ $breakpoints: (
 .menu {
   display: flex;
   align-items: center;
-  gap: 8px;
 
   @include respond-to(md) {
     gap: 12px;
@@ -101,6 +99,7 @@ $breakpoints: (
     background: transparent;
     border: none;
     outline: none;
+    padding: 0 10px;
 
     @include respond-to(md) {
       font-size: 1.4rem;
@@ -139,7 +138,7 @@ $breakpoints: (
 .user-menu {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: px;
   padding: 10px;
 }
 

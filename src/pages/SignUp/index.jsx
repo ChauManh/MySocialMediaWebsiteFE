@@ -78,7 +78,7 @@ function SignUp() {
     <div className={cx("wrapper")}>
       <div className={cx("webDescription")}>
         <img src={images.logo} alt="Logo" className={cx("logo")} />
-        <span className={cx("slogan")}>ZingMe</span>
+        <span className={cx("slogan")}>MT SOCIAL MEDIA</span>
       </div>
       <form onSubmit={handleSignUp} className={cx("formWrapper")}>
         <div className={cx("infoWrapper")}>
@@ -110,7 +110,7 @@ function SignUp() {
           />
           <div className={cx("actions")}>
             <span className={cx("terms")}>
-              Đồng ý và chấp nhận các điều khoản của ZingMe
+              Đồng ý và chấp nhận các điều khoản của MT Social Media
             </span>
             <Button type="submit" primary className={cx("signUpBtn")}>
               Đăng ký

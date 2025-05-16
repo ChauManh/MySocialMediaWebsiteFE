@@ -39,26 +39,6 @@
   gap: 6px;
 }
 
-.message {
-  padding: 6px 10px;
-  border-radius: 16px;
-  max-width: 70%;
-  word-break: break-word;
-  font-size: 1.4rem;
-}
-
-.myMessage {
-  background: #3b82f6;
-  color: white;
-  align-self: flex-end;
-}
-
-.theirMessage {
-  background: #f1f1f1;
-  color: #333;
-  align-self: flex-start;
-}
-
 .inputSection {
   display: flex;
   padding: 10px;
@@ -89,4 +69,53 @@
   &:hover {
     color: #333;
   }
+}
+
+.uploadBtn {
+  font-size: 1.6rem;
+  color: #666;
+  cursor: pointer;
+  align-items: center;
+  display: flex;
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.message {
+  padding: 6px 10px;
+  border-radius: 16px;
+  max-width: 70%;
+  word-break: break-word;
+  font-size: 1.4rem;
+}
+
+.myMessage {
+  background: #3b82f6;
+  color: white;
+  align-self: flex-end;
+}
+
+.theirMessage {
+  background: #f1f1f1;
+  color: #333;
+  align-self: flex-start;
+}
+
+/* Tin nhắn là ảnh thì không cần nền hay padding */
+.imageMessage {
+  background: transparent !important;
+  padding: 0 !important;
+  align-self: flex-end; // hoặc flex-end nếu bạn muốn ảnh bên phải khi là tin nhắn của mình
+}
+
+/* Ảnh trong tin nhắn */
+.chatImage {
+  width: 180px;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
 }

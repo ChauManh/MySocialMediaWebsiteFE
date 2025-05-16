@@ -22,6 +22,19 @@ const sendMessage = async (conversationId, message, receiveUserId) => {
   }
 };
 
+const sendMessageImage = async (data) => {
+  try {
+    const res = await axiosInstance.post("message", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
 const readMessage = async (conversationId) => {
   try {
     const result = await axiosInstance.patch(`message/${conversationId}`);
@@ -31,4 +44,9 @@ const readMessage = async (conversationId) => {
   }
 };
 
-export { getMessageByConversationId, sendMessage, readMessage };
+export {
+  getMessageByConversationId,
+  sendMessage,
+  readMessage,
+  sendMessageImage,
+};

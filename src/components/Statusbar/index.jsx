@@ -8,6 +8,7 @@ import { createPost } from "../../services/postApi";
 import { useLoading } from "../../contexts/loadingContext";
 import images from "../../assets/images";
 import toast from "react-hot-toast";
+import PostPopup from "../PostPopup";
 
 const cx = classNames.bind(styles);
 
@@ -68,48 +69,17 @@ function Statusbar({ onPostSuccess }) {
         </Button>
       </div>
       {showPopup && (
-        <div className={cx("popupOverlay")}>
-          <div className={cx("popupContent")}>
-            <h3>Đăng bài viết mới</h3>
-            <textarea
-              placeholder={`${user?.fullname}, bạn đang nghĩ gì?`}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className={cx("captionInput")}
-            />
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={(e) => {
-                const files = Array.from(e.target.files);
-                setImageFiles(files);
-                const previews = files.map((file) => URL.createObjectURL(file));
-                setPreviewUrl(previews);
-              }}
-            />
-            {previewUrl && previewUrl.length > 0 && (
-              <div className={cx("imagePreviewWrapper")}>
-                {previewUrl.map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    alt={`preview-${index}`}
-                    className={cx("imagePreview")}
-                  />
-                ))}
-              </div>
-            )}
-            <div className={cx("popupActions")}>
-              <Button onClick={handleSubmitPost} primary>
-                Đăng
-              </Button>
-              <Button onClick={handleClosePopup} outline>
-                Huỷ
-              </Button>
-            </div>
-          </div>
-        </div>
+        <PostPopup
+          user={user}
+          content={content}
+          setContent={setContent}
+          imageFiles={imageFiles}
+          setImageFiles={setImageFiles}
+          previewUrl={previewUrl}
+          setPreviewUrl={setPreviewUrl}
+          onClose={handleClosePopup}
+          onSubmit={handleSubmitPost}
+        />
       )}
     </div>
   );

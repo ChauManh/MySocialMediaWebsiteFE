@@ -51,7 +51,7 @@ function Header() {
               <img src={images.logo} alt="Logo" />
             </button>
           </div>
-          <span className={cx("webName")}>MT.SOCIAL.MEDIA</span>
+          <span className={cx("webName")}>MT SOCIAL MEDIA</span>
         </div>
 
         <div className={cx("search-bar")}>
@@ -115,9 +115,7 @@ function Header() {
             trigger="mouseenter focus click"
             theme="light"
           >
-            <div>
-              <Avatar image={user?.profilePicture || images.avatar} pdl />
-            </div>
+            <Avatar image={user?.profilePicture || images.avatar} pdl />
           </Tippy>
         </div>
       </div>

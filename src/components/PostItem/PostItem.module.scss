@@ -102,30 +102,65 @@
 
 .media {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   padding-top: 12px;
-  margin-bottom: 12px;
-}
+  margin: 12px;
 
-.media.single {
-  grid-template-columns: 1fr;
-}
+  &.single {
+    grid-template-columns: 1fr;
 
-.media.double {
-  grid-template-columns: 1fr 1fr;
-}
+    .mediaItem {
+      height: 400px;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 12px;
 
-.media.multiple {
-  grid-template-columns: repeat(3, 1fr);
+      @media screen and (max-width: 768px) {
+        height: 260px;
+      }
+    }
+  }
+
+  &.double {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.multiple {
+    grid-template-columns: repeat(3, 1fr);
+
+    @media screen and (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  // Default style (fallback for .double/.multiple)
+  .mediaItem {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  &.double .mediaItem,
+  &.multiple .mediaItem {
+    height: 200px;
+
+    @media screen and (max-width: 768px) {
+      height: 160px;
+    }
+  }
 }
 
 .mediaItem {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
   border: 0.5px solid var(--primary);
   border-radius: 8px;
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
   cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    height: 160px;
+  }
 }
 
 .postStatus {
@@ -208,30 +243,4 @@
 
 .noComments {
   font-size: 16px;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1001;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: zoom-out;
-
-  .modalContent {
-    max-width: 90%;
-    max-height: 90%;
-    cursor: default;
-
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-  }
 }

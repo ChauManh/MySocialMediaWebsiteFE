@@ -31,6 +31,8 @@ export const ChatProvider = ({ children }) => {
   };
 
   const updateChatMessages = (conversationId, message) => {
+    if (!message || !message._id) return;
+
     setOpenChats((prev) =>
       prev.map((chat) => {
         if (chat.conversationId !== conversationId) return chat;
@@ -47,11 +49,22 @@ export const ChatProvider = ({ children }) => {
   };
 
   const updateConversationsLastMessage = (conversationId, newMessage) => {
-    console.log(conversations);
+    const previewMessage =
+      newMessage.messageType === "image"
+        ? "Đã gửi 1 ảnh"
+        : newMessage.message || "Tin nhắn mới";
+
     setConversations((prev) =>
       prev.map((c) =>
         c._id === conversationId
-          ? { ...c, lastMessage: newMessage, updatedAt: new Date() }
+          ? {
+              ...c,
+              lastMessage: {
+                ...newMessage,
+                message: previewMessage, // ghi đè message dùng để hiển thị
+              },
+              updatedAt: new Date(),
+            }
           : c
       )
     );
