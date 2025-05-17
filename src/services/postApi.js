@@ -65,6 +65,24 @@ const getDetailPost = async (postId) => {
   }
 };
 
+const savePost = async (postId) => {
+  try {
+    const result = await axiosInstance.patch(`post/${postId}/save`);
+    return result.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+const getSavedPosts = async () => {
+  try {
+    const result = await axiosInstance.get("post/saved");
+    return result.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
 export {
   createPost,
   getPosts,
@@ -73,4 +91,6 @@ export {
   deletePost,
   commentPost,
   getDetailPost,
+  savePost,
+  getSavedPosts,
 };

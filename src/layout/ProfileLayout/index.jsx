@@ -22,6 +22,7 @@ import {
 import toast from "react-hot-toast";
 import Button from "../../components/Button";
 import { useLoading } from "../../contexts/loadingContext";
+import ImageModal from "../../components/ImageModal";
 
 const cx = classNames.bind(styles);
 
@@ -40,6 +41,11 @@ function ProfileLayout({ children }) {
   const isCurrentUserProfile = userId === user?._id;
   const location = useLocation();
   const currentPath = location.pathname;
+  const [imageModal, setImageModal] = useState({
+    open: false,
+    url: "",
+    type: "image",
+  });
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -115,7 +121,11 @@ function ProfileLayout({ children }) {
 
   const handleEditAvatar = () => {
     if (!isCurrentUserProfile) {
-      toast.error("Bạn không thể sửa avatar của người khác.");
+      setImageModal({
+        open: true,
+        url: userProfile?.profilePicture || images.avatar,
+        type: "image",
+      });
       return;
     }
     setEditingAvatar(true);
@@ -169,7 +179,11 @@ function ProfileLayout({ children }) {
 
   const handleEditCover = () => {
     if (!isCurrentUserProfile) {
-      toast.error("Bạn không thể sửa ảnh bìa của người khác.");
+      setImageModal({
+        open: true,
+        url: userProfile?.backgroundPicture || images.empty,
+        type: "image",
+      });
       return;
     }
     setEditingAvatar(false);
@@ -268,7 +282,25 @@ function ProfileLayout({ children }) {
                 </Button>
               ) : (
                 <>
-                  <Button small primary onClick={handleOpenFileDialog}>
+                  <Button
+                    small
+                    outline
+                    onClick={() =>
+                      setImageModal({
+                        open: true,
+                        url: userProfile?.backgroundPicture || images.empty,
+                        type: "image",
+                      })
+                    }
+                  >
+                    Xem ảnh
+                  </Button>
+                  <Button
+                    small
+                    primary
+                    className="btn-no-margin-left"
+                    onClick={handleOpenFileDialog}
+                  >
                     Sửa ảnh bìa
                   </Button>
                   <Button
@@ -301,7 +333,25 @@ function ProfileLayout({ children }) {
                   </Button>
                 ) : (
                   <>
-                    <Button small primary onClick={handleOpenFileDialog}>
+                    <Button
+                      small
+                      outline
+                      onClick={() =>
+                        setImageModal({
+                          open: true,
+                          url: userProfile?.profilePicture || images.avatar,
+                          type: "image",
+                        })
+                      }
+                    >
+                      Xem ảnh
+                    </Button>
+                    <Button
+                      small
+                      primary
+                      className="btn-no-margin-left"
+                      onClick={handleOpenFileDialog}
+                    >
                       Sửa ảnh đại diện
                     </Button>
                     <Button
@@ -394,9 +444,31 @@ function ProfileLayout({ children }) {
               Bạn bè
             </Button>
           </Link>
+          {isCurrentUserProfile && (
+            <Link to={`/profile/${userId}/saved-posts`}>
+              <Button
+                small
+                className={
+                  currentPath === `/profile/${userId}/saved-posts`
+                    ? "primary"
+                    : "outline"
+                }
+              >
+                Đã lưu
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
       <div className={cx("container")}>{children}</div>
+      {imageModal.open && (
+        <ImageModal
+          mediaList={[{ url: imageModal.url, type: imageModal.type }]}
+          currentIndex={0}
+          onClose={() => setImageModal({ open: false, url: "", type: "image" })}
+          onChangeIndex={() => {}}
+        />
+      )}
       <input
         type="file"
         accept="image/*"

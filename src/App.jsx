@@ -10,6 +10,7 @@ import ChatWrapper from "./components/ChatWrapper";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Fragment } from "react";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const isAuthenticated = () => {
@@ -71,6 +72,7 @@ function App() {
               />
             );
           })}
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
         {isLoggedIn && <ChatWrapper />}

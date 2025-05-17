@@ -7,17 +7,25 @@ import formatDate from "../../utils/formatDate";
 import images from "../../assets/images";
 import Button from "../Button";
 import { useAuth } from "../../contexts/authContext";
-import { commentPost, deletePost, likePost } from "../../services/postApi";
+import {
+  commentPost,
+  deletePost,
+  likePost,
+  savePost,
+} from "../../services/postApi";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import ImageModal from "../ImageModal";
+import PostOptionsMenu from "../PostOptionsMenu";
 const cx = classNames.bind(styles);
 
 function PostItem({ postData, onDelete, showAllComments }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isLiked, setLike] = useState(postData?.likes?.includes(user?._id));
-  const [isSaved, setSave] = useState(false);
+  const [isSaved, setSave] = useState(
+    user?.savedPosts?.some((item) => item.post === postData._id)
+  );
   const [likeCount, setLikeCount] = useState(postData?.likes?.length);
   const [showDeleteOption, setShowDeleteOption] = useState(false);
   const [comments, setComments] = useState(postData.comments || []);
@@ -73,8 +81,12 @@ function PostItem({ postData, onDelete, showAllComments }) {
     } else toast.error(res.EM);
   };
 
-  const handleSave = () => {
-    setSave(!isSaved);
+  const handleSave = async () => {
+    const res = await savePost(postData._id);
+    if (res.EC === 0) {
+      toast.success(res.EM);
+      setSave(!isSaved);
+    } else toast.error(res.EM);
   };
 
   return (
@@ -108,14 +120,12 @@ function PostItem({ postData, onDelete, showAllComments }) {
             <i className="bi bi-three-dots"></i>
           </button>
           {showDeleteOption && (
-            <Button
-              small
-              primary
-              onClick={handleDeletePost}
-              className={cx("buttonDelete")}
-            >
-              Xóa
-            </Button>
+            <PostOptionsMenu
+              onDelete={handleDeletePost}
+              onSave={handleSave}
+              isSaved={isSaved}
+              postAuthorId={postData?.authorId?._id}
+            />
           )}
         </div>
       </div>

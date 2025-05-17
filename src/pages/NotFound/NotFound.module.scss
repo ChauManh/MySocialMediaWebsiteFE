@@ -1,0 +1,45 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  text-align: center;
+  padding: 20px;
+}
+
+.code {
+  font-size: 8rem;
+  font-weight: 800;
+  color: var(--primary, #0d6efd);
+  margin-bottom: 8px;
+}
+
+.message {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 500px;
+  margin-bottom: 32px;
+}
+
+.button {
+  font-size: 1rem;
+  padding: 10px 20px;
+  background-color: var(--primary, #0d6efd);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0b5ed7;
+  }
+}

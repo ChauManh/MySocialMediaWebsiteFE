@@ -7,6 +7,7 @@ import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Search from "../pages/Search";
 import PostDetail from "../pages/PostDetail";
+import ProfileSavedPosts from "../pages/ProfileSavedPosts";
 
 const publicRoute = [
   { path: "/", component: SignIn, Layout: null },
@@ -23,6 +24,11 @@ const privateRoute = [
   {
     path: "/profile/:userId/friends",
     component: ProfileFriendList,
+    Layout: ProfileLayout,
+  },
+  {
+    path: "/profile/:userId/saved-posts",
+    component: ProfileSavedPosts,
     Layout: ProfileLayout,
   },
   { path: "/search", component: Search, Layout: YHeaderNSidebarLayout },

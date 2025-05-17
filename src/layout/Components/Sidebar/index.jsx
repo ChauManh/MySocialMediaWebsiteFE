@@ -41,6 +41,12 @@ function Sidebar() {
         label="Bài viết của tôi"
         collapsed={isCollapsed}
       />
+            <SidebarItem
+        to={`/profile/${user?._id}/saved-posts`}
+        icon="bi bi-bookmark"
+        label="Bài viết đã lưu"
+        collapsed={isCollapsed}
+      />
     </aside>
   );
 }

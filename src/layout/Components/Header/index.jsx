@@ -112,10 +112,12 @@ function Header() {
             }
             placement="bottom"
             interactive={true}
-            trigger="mouseenter focus click"
+            trigger="click"
             theme="light"
           >
-            <Avatar image={user?.profilePicture || images.avatar} pdl />
+            <div>
+              <Avatar image={user?.profilePicture || images.avatar} pdl />
+            </div>
           </Tippy>
         </div>
       </div>
