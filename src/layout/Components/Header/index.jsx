@@ -11,6 +11,13 @@ import { useAuth } from "../../../contexts/authContext";
 import { useState } from "react";
 import NotificationBar from "../../../components/NotificationBar";
 import MessageBar from "../../../components/MessageBar";
+import {
+  addUserHistorySearch,
+  getSearchHistory,
+  deleteOneSearchHistoryByIndex,
+} from "../../../services/userHistoryApi";
+import SearchHistoryDropdown from "../../../components/SearchHistoryDropdown";
+import toast from "react-hot-toast";
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +27,8 @@ function Header() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showConversations, setShowConversations] = useState(false);
+  const [searchHistory, setSearchHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -32,10 +41,30 @@ function Header() {
     window.location.href = "/home";
   };
 
-  const handleSearch = () => {
-    if (keyword) {
-      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+  const handleDelete = async (item, index) => {
+    const res = await deleteOneSearchHistoryByIndex(index);
+    if (res.EC === 0) {
+      toast.success(res.EM);
+      setSearchHistory(res.result);
+    } else {
+      toast.error(res.EM);
     }
+  };
+
+  const handleSearch = async (item) => {
+    if (item) {
+      if (item.type === "user") {
+        await addUserHistorySearch("user", item.user);
+        navigate(`/profile/${item.user._id}`);
+      } else if (item.type === "keyword") {
+        await addUserHistorySearch("keyword", item.keyword.trim());
+        navigate(`/search?keyword=${encodeURIComponent(item.keyword.trim())}`);
+      }
+    } else if (keyword.trim()) {
+      await addUserHistorySearch("keyword", keyword.trim());
+      navigate(`/search?keyword=${encodeURIComponent(keyword.trim())}`);
+    }
+    setKeyword("");
   };
 
   const handleProfile = () => {
@@ -62,6 +91,12 @@ function Header() {
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
+            onFocus={async () => {
+              const history = await getSearchHistory();
+              setSearchHistory(history.result || []);
+              setShowHistory(true);
+            }}
+            onBlur={() => setTimeout(() => setShowHistory(false), 200)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
@@ -70,6 +105,15 @@ function Header() {
             }}
             placeholder="Tìm bạn bè hoặc bài viết..."
           />
+          {showHistory && (
+            <SearchHistoryDropdown
+              historyList={searchHistory}
+              onSelect={(item) => {
+                handleSearch(item);
+              }}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
 
         <div className={cx("menu")}>

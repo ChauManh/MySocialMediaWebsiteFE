@@ -8,11 +8,13 @@ import { sendMessage, sendMessageImage } from "../../services/messageApi";
 import { useAuth } from "../../contexts/authContext";
 import { useChat } from "../../contexts/chatContext";
 import ImageModal from "../ImageModal";
+import { useLoading } from "../../contexts/loadingContext";
 
 const cx = classNames.bind(styles);
 
 function ChatBox({ friend, onClose }) {
   const { user } = useAuth();
+  const { setIsLoading } = useLoading();
   const [message, setMessage] = useState("");
   const messages = friend.messages;
   const { updateChatMessages, updateConversationsLastMessage } = useChat();
@@ -51,11 +53,12 @@ function ChatBox({ friend, onClose }) {
     formData.append("file", file);
     formData.append("conversationId", friend.conversationId);
     formData.append("receiveUserId", friend._id);
-
+    setIsLoading(true);
     const res = await sendMessageImage(formData);
     if (res.EC === 0) {
       updateChatMessages(friend.conversationId, res.result);
       updateConversationsLastMessage(friend.conversationId, res.result);
+      setIsLoading(false);
     }
   };
 
@@ -84,9 +87,9 @@ function ChatBox({ friend, onClose }) {
               <div
                 key={index}
                 className={cx("message", {
-                  myMessage: isMe && msg.messageType !== "image",
-                  theirMessage: !isMe && msg.messageType !== "image",
-                  imageMessage: msg.messageType === "image", // ✔ dùng cho ảnh
+                  imageMessage: msg.messageType === "image",
+                  myMessage: isMe,
+                  theirMessage: !isMe,
                 })}
               >
                 <img

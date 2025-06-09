@@ -16,7 +16,7 @@ function ChatWrapper() {
     updateChatMessages,
     updateConversationsLastMessage,
   } = useChat();
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   useEffect(() => {
     const handleNewMessage = (data) => {
       const { message, conversationId, sender } = data;
@@ -39,8 +39,7 @@ function ChatWrapper() {
 
   return (
     <>
-      {token &&
-        user &&
+      {user &&
         openChats.map((friend, index) => (
           <div
             key={friend._id}

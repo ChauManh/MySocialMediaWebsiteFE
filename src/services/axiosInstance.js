@@ -20,15 +20,26 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response.status === 401) {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
       const res = await refreshToken();
+
       if (res.EC === 0) {
-        localStorage.setItem("access_token", res.result.access_token);
-        error.config.headers["Authorization"] =
-          `Bearer ${res.result.access_token}`;
-        return axiosInstance(error.config); // Thực hiện lại request với token mới
+        const newAccessToken = res.result.access_token;
+        localStorage.setItem("access_token", newAccessToken);
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return axiosInstance(originalRequest); // Retry request
+      } else {
+        // Token refresh failed → logout
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        window.location.href = "/";
+        return Promise.reject(error);
       }
     }
+
     return Promise.reject(error);
   }
 );

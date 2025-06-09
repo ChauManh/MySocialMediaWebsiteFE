@@ -14,6 +14,7 @@ import {
   acceptFriendRequest,
   denyFriendRequest,
 } from "../../services/userApi";
+import { addUserHistorySearch } from "../../services/userHistoryApi";
 
 const cx = classNames.bind(styles);
 
@@ -32,6 +33,10 @@ function UserCard({ userData }) {
   const mutualFriends = userData?.friends.filter((friendId) =>
     user?.friends.includes(friendId)
   );
+
+  const handleClickUser = async () => {
+    await addUserHistorySearch("user", userData._id);
+  };
 
   const handleFriendAction = async (actionType) => {
     try {
@@ -100,16 +105,14 @@ function UserCard({ userData }) {
   };
   return (
     <div className={cx("userItem")}>
-      <Link to={`/profile/${userData._id}`}>
+      <Link to={`/profile/${userData._id}`} onClick={handleClickUser}>
         <Avatar image={userData.profilePicture || images.avatar} />
       </Link>
-      <div className={cx("info")}>
-        <Link to={`/profile/${userData._id}`}>
+      <Link to={`/profile/${userData._id}`} onClick={handleClickUser} className={cx("info")}>
           <h4>{userData.fullname}</h4>
-        </Link>
-        <p className={cx("friendCount")}>{friendCount} bạn bè</p>
-        <p className={cx("mutual")}>{mutualFriends.length || 0} bạn chung</p>
-      </div>
+          <p className={cx("friendCount")}>{friendCount} bạn bè</p>
+          <p className={cx("mutual")}>{mutualFriends.length || 0} bạn chung</p>
+      </Link>
       <div className={cx("actionButtons")}>
         {isFriend ? (
           <Button small outline onClick={() => handleFriendAction("unfriend")}>

@@ -38,9 +38,19 @@ function MessageCard({ conversation, onClick }) {
       <div className={cx("info")}>
         <div className={cx("name")}>{conversation?.with?.fullname}</div>
         <div className={cx("lastMessage")}>
-          {conversation?.lastMessage?.senderId === user._id || conversation?.lastMessage?.senderId._id === user._id
-            ? `Bạn: ${conversation?.lastMessage?.message}`
-            : `${conversation?.with?.fullname}: ${conversation?.lastMessage?.message}`}
+          {(() => {
+            const senderName =
+              lastMessage?.senderId === user._id ||
+              lastMessage?.senderId?._id === user._id
+                ? "Bạn"
+                : conversation?.with?.fullname;
+
+            if (lastMessage?.messageType === "image") {
+              return `${senderName} đã gửi một ảnh`;
+            }
+
+            return `${senderName}: ${lastMessage?.message}`;
+          })()}
         </div>
       </div>
     </div>

@@ -40,6 +40,10 @@
     margin: 0;
     color: #666;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .friendCount,

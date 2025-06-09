@@ -23,4 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# Bỏ qua file CSS module
+*.module.css
+*.module.css.map
+
 .env

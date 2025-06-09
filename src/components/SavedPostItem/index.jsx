@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from "./SavedPostItem.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatDate from "../../utils/formatDate";
 import images from "../../assets/images";
 import Button from "../Button";
@@ -16,6 +16,7 @@ function SavedPostItem({ post, savedAt, onUnsave }) {
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
+  const navigate = useNavigate();
 
   const firstMedia = post?.media?.[0];
 
@@ -25,6 +26,10 @@ function SavedPostItem({ post, savedAt, onUnsave }) {
       toast.success(res.EM);
       onUnsave?.();
     } else toast.error(res.EM);
+  };
+
+  const handleNavigateToPost = () => {
+    navigate(`/post/${post._id}`);
   };
 
   return (
@@ -46,18 +51,14 @@ function SavedPostItem({ post, savedAt, onUnsave }) {
         )}
       </div>
 
-      <div className={cx("infoSection")}>
+      <div className={cx("infoSection")} onClick={handleNavigateToPost}>
         <h4 className={cx("postTitle")}>{post.content}</h4>
         <p className={cx("meta")}>
           Bài viết • Đã lưu vào {formatDate(savedAt)}
         </p>
 
         <div className={cx("authorSection")}>
-          <Link to={`/profile/${post.authorId?._id}`}>
-            <Avatar
-              image={post.authorId?.profilePicture || images.avatar}
-            />
-          </Link>
+          <Avatar image={post.authorId?.profilePicture || images.avatar} />
           <Link
             to={`/profile/${post.authorId?._id}`}
             className={cx("authorName")}

@@ -82,8 +82,9 @@ $breakpoints: (
 
 // ========== SEARCH BAR ==========
 .search-bar {
+  position: relative;
   flex: 1;
-  max-width: 280px;
+  max-width: 320px;
   margin: 0 8px;
   display: flex;
   align-items: center;
