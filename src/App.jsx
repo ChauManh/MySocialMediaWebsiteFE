@@ -11,13 +11,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Fragment } from "react";
 import NotFound from "./pages/NotFound";
+import { useAuth } from "./contexts/authContext";
 
 function App() {
-  const isAuthenticated = () => {
-    return !!localStorage.getItem("access_token");
-  };
-
-  const isLoggedIn = isAuthenticated();
+  const { token } = useAuth();
+  const isLoggedIn = !!token;
 
   return (
     <Router>
@@ -38,9 +36,13 @@ function App() {
                 key={index}
                 path={route.path}
                 element={
-                  <Layout>
-                    <Page />
-                  </Layout>
+                  isLoggedIn ? (
+                    <Navigate to="/home" replace />
+                  ) : (
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  )
                 }
               />
             );

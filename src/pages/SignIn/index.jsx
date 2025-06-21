@@ -3,22 +3,13 @@ import styles from "./SignIn.module.scss";
 import images from "../../assets/images";
 import Input from "../../components/InputItem";
 import Button from "../../components/Button";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { loginApi } from "../../services/authApi.js";
-import { useAuth } from "../../contexts/authContext.jsx";
 const cx = classNames.bind(styles);
 
 function SignIn() {
-  const navigate = useNavigate();
-  const { token } = useAuth();
-  useEffect(() => {
-    if (token) {
-      navigate("/home");
-    }
-  }, [token, navigate]);
-
   const [form, setForm] = useState({
     email: "",
     password: "",

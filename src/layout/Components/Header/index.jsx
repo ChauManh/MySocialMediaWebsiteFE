@@ -22,7 +22,7 @@ import toast from "react-hot-toast";
 const cx = classNames.bind(styles);
 
 function Header() {
-  const { user, setUser } = useAuth();
+  const { user, setUser, setToken } = useAuth();
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -34,6 +34,7 @@ function Header() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     setUser(null);
+    setToken(null);
     navigate("/");
   };
 
