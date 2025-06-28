@@ -8,6 +8,7 @@ import SignUp from "../pages/SignUp";
 import Search from "../pages/Search";
 import PostDetail from "../pages/PostDetail";
 import ProfileSavedPosts from "../pages/ProfileSavedPosts";
+import Setting from "../pages/Setting";
 
 const publicRoute = [
   { path: "/", component: SignIn, Layout: null },
@@ -33,6 +34,7 @@ const privateRoute = [
   },
   { path: "/search", component: Search, Layout: YHeaderNSidebarLayout },
   { path: "/post/:id", component: PostDetail },
+  { path: "/settings", component: Setting, Layout: null},
 ];
 
 export { publicRoute, privateRoute };

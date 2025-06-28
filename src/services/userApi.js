@@ -27,6 +27,15 @@ const updateUserAbout = async (about) => {
   }
 };
 
+const updateUserProfile = async (dataUpdate) => {
+  try {
+    const result = await axiosInstance.patch("user", { dataUpdate });
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
 const sendFriendRequest = async (userId) => {
   try {
     const result = await axiosInstance.post(
@@ -133,12 +142,24 @@ const deleteBackground = async () => {
   }
 };
 
+const updateUserPrivacyShowFriend = async (isShowFriends) => {
+  try {
+    const result = await axiosInstance.patch("user/show-friends", {
+      isShowFriends,
+    });
+    return result.data;
+  } catch (error) {
+    return error.response?.data;
+  }
+};
+
 export {
   getUserInfo,
   getOwnerUserInfo,
   sendFriendRequest,
   cancelFriendRequest,
   unfriend,
+  updateUserProfile,
   acceptFriendRequest,
   denyFriendRequest,
   updateUserAbout,
@@ -147,4 +168,5 @@ export {
   deleteAvatar,
   updateBackground,
   deleteBackground,
+  updateUserPrivacyShowFriend,
 };

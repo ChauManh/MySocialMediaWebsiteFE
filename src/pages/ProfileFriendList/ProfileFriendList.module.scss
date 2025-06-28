@@ -21,6 +21,22 @@
   }
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-btn {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
 .list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

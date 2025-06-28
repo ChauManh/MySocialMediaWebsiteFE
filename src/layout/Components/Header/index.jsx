@@ -52,6 +52,10 @@ function Header() {
     }
   };
 
+  const handleSetting = () => {
+    navigate("/settings"); // hoặc "/setting" nếu bạn đặt route như vậy
+  };
+
   const handleSearch = async (item) => {
     if (item) {
       if (item.type === "user") {
@@ -149,6 +153,9 @@ function Header() {
               <div className={cx("user-menu")}>
                 <button className={cx("menu-item")} onClick={handleProfile}>
                   Xem thông tin
+                </button>
+                <button className={cx("menu-item")} onClick={handleSetting}>
+                  Cài đặt
                 </button>
                 <button className={cx("menu-item")} onClick={handleLogout}>
                   Đăng xuất
